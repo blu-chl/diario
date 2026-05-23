@@ -53,274 +53,61 @@
       margin-bottom: 2.5rem;
     }
 
-    .users-grid {
+    /* ── Auth forms ── */
+    .auth-form {
       display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      justify-content: center;
-      max-width: 560px;
+      flex-direction: column;
+      gap: 1.25rem;
+      width: min(320px, 90vw);
       padding: 0 1rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .user-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      padding: 12px;
-      border-radius: 8px;
-      transition: background var(--tr);
-      min-width: 90px;
-    }
-
-    .user-card:hover { background: var(--bg2); }
-
-    .user-avatar {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      background: var(--bg2);
-      border: 2px solid var(--line);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px;
-      font-family: var(--font-ui);
-      font-weight: 500;
-      color: var(--ink2);
-      overflow: hidden;
-      transition: border-color var(--tr);
-      position: relative;
-    }
-
-    .user-avatar img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
-    .user-card:hover .user-avatar { border-color: var(--ink3); }
-
-    .user-card-name {
-      font-family: var(--font-ui);
-      font-size: 12px;
-      color: var(--ink2);
-      text-align: center;
-    }
-
-    .add-user-card {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      padding: 12px;
-      border-radius: 8px;
-      transition: background var(--tr);
-      min-width: 90px;
-    }
-
-    .add-user-card:hover { background: var(--bg2); }
-
-    .add-user-icon {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      border: 2px dashed var(--ink3);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px;
-      color: var(--ink3);
-    }
-
-    .add-user-label {
-      font-family: var(--font-ui);
-      font-size: 12px;
-      color: var(--ink3);
-    }
-
-    /* Password prompt */
-    .pw-prompt {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
       animation: fadeIn 0.18s ease;
     }
 
-    .pw-prompt.hidden { display: none; }
+    .auth-form.hidden { display: none; }
 
-    .pw-back {
+    .auth-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .auth-input {
+      font-family: var(--font-ui);
+      font-size: 14px;
+      color: var(--ink);
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--line);
+      padding: 6px 0;
+      outline: none;
+      width: 100%;
+      transition: border-color var(--tr);
+    }
+
+    .auth-input:focus { border-bottom-color: var(--ink3); }
+    .auth-input::placeholder { color: var(--ink3); }
+
+    .auth-switch {
       font-family: var(--font-ui);
       font-size: 11px;
       color: var(--ink3);
-      cursor: pointer;
-      letter-spacing: 0.06em;
-    }
-
-    .pw-back:hover { color: var(--ink2); }
-
-    .pw-who {
-      font-family: var(--font-body);
-      font-style: italic;
-      font-size: 16px;
-      color: var(--ink2);
-    }
-
-    .pw-avatar-sm {
-      width: 52px; height: 52px;
-      border-radius: 50%;
-      background: var(--bg2);
-      border: 2px solid var(--line);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px;
-      font-family: var(--font-ui);
-      font-weight: 500;
-      color: var(--ink2);
-      overflow: hidden;
-    }
-
-    .pw-avatar-sm img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
-    .pw-field {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .pw-dots {
-      display: flex; gap: 10px;
-    }
-
-    .pw-dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      border: 1.5px solid var(--ink3);
-      transition: background var(--tr), border-color var(--tr);
-    }
-
-    .pw-dot.filled { background: var(--ink); border-color: var(--ink); }
-
-    .pw-input-real {
-      width: 160px;
       text-align: center;
-      font-size: 14px;
-      font-family: var(--font-ui);
-      border: none;
-      border-bottom: 1px solid var(--line);
-      background: transparent;
-      color: var(--ink);
-      padding: 6px 0;
-      outline: none;
+      margin-top: 0.25rem;
     }
 
-    .pw-input-real:focus { border-bottom-color: var(--ink3); }
+    .auth-switch span {
+      color: var(--ink2);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+
+    .auth-switch span:hover { color: var(--ink); }
 
     .pw-error {
       font-family: var(--font-ui);
       font-size: 11px;
       color: #b94040;
       min-height: 16px;
-    }
-
-    /* New user modal */
-    .modal-backdrop {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.4);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-backdrop.open { display: flex; }
-
-    .modal {
-      background: var(--bg);
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 2rem 1.75rem;
-      width: min(340px, 90vw);
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .modal-title {
-      font-family: var(--font-ui);
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink3);
-    }
-
-    .modal label {
-      font-family: var(--font-ui);
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--ink3);
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .modal input[type="text"],
-    .modal input[type="password"] {
-      width: 100%;
-      font-family: var(--font-ui);
-      font-size: 14px;
-      color: var(--ink);
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid var(--line);
-      padding: 6px 0;
-      outline: none;
-    }
-
-    .modal input:focus { border-bottom-color: var(--ink3); }
-
-    .emoji-picker {
-      display: flex; flex-wrap: wrap; gap: 6px;
-    }
-
-    .emoji-btn {
-      width: 34px; height: 34px;
-      border: 1px solid var(--line);
-      background: transparent;
-      border-radius: var(--radius);
-      font-size: 18px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background var(--tr);
-    }
-
-    .emoji-btn:hover, .emoji-btn.active { background: var(--bg2); border-color: var(--ink3); }
-
-    .avatar-upload-btn {
-      font-family: var(--font-ui);
-      font-size: 11px;
-      color: var(--ink3);
-      border: 1px dashed var(--ink3);
-      background: transparent;
-      padding: 6px 12px;
-      border-radius: var(--radius);
-      cursor: pointer;
-      display: inline-block;
-      text-align: center;
-    }
-
-    .avatar-preview {
-      width: 48px; height: 48px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 1px solid var(--line);
-      display: none;
-    }
-
-    .modal-actions {
-      display: flex; gap: 8px; justify-content: flex-end;
     }
 
     /* ── APP ── */
@@ -369,14 +156,10 @@
       border-radius: 50%;
       background: var(--bg2);
       display: flex; align-items: center; justify-content: center;
-      font-size: 12px;
-      overflow: hidden;
-    }
-
-    .current-user-avatar img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
+      font-size: 11px;
+      font-family: var(--font-ui);
+      font-weight: 500;
+      color: var(--ink2);
     }
 
     .current-user-name {
@@ -408,6 +191,7 @@
     }
 
     .btn-primary:hover { opacity: 0.82; background: var(--ink); color: var(--bg); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .date-wrap { margin-bottom: 0.5rem; }
 
@@ -693,7 +477,6 @@
       .page { padding: 2rem 1.25rem 5rem; }
       .entry-area { font-size: 16px; min-height: 260px; }
       .font-grid { grid-template-columns: 1fr; }
-      .users-grid { gap: 1rem; }
     }
   </style>
 </head>
@@ -703,54 +486,43 @@
 <div id="loginScreen">
   <p class="login-title">mi diario</p>
 
-  <div class="users-grid" id="usersGrid"></div>
-
-  <div class="pw-prompt hidden" id="pwPrompt">
-    <span class="pw-back" onclick="backToUsers()">← volver</span>
-    <div class="pw-avatar-sm" id="pwAvatarSm"></div>
-    <span class="pw-who" id="pwWho"></span>
-    <div class="pw-field">
-      <div class="pw-dots" id="pwDots"></div>
-      <input type="password" class="pw-input-real" id="pwInput"
-        placeholder="contraseña"
-        maxlength="30"
-        oninput="onPwInput()"
-        onkeydown="if(event.key==='Enter') tryLogin()" />
+  <!-- Login -->
+  <div class="auth-form" id="loginForm">
+    <div class="auth-field">
+      <label class="date-label">correo</label>
+      <input type="email" id="loginEmail" class="auth-input" placeholder="tu@correo.com"
+        onkeydown="if(event.key==='Enter') doLogin()" autocomplete="email" />
     </div>
-    <p class="pw-error" id="pwError"></p>
-    <button class="btn btn-primary" onclick="tryLogin()">Entrar</button>
+    <div class="auth-field">
+      <label class="date-label">contraseña</label>
+      <input type="password" id="loginPassword" class="auth-input" placeholder="••••••••"
+        onkeydown="if(event.key==='Enter') doLogin()" autocomplete="current-password" />
+    </div>
+    <p class="pw-error" id="loginError"></p>
+    <button class="btn btn-primary" onclick="doLogin()" id="loginBtn">Entrar</button>
+    <p class="auth-switch">¿Sin cuenta? <span onclick="showRegister()">Crear una</span></p>
   </div>
-</div>
 
-<!-- ══════════════════ NEW USER MODAL ══════════════════ -->
-<div class="modal-backdrop" id="newUserModal">
-  <div class="modal">
-    <div class="modal-title">nuevo usuario</div>
-
-    <div>
-      <label>nombre</label>
-      <input type="text" id="nuName" placeholder="Tu nombre" maxlength="20" />
+  <!-- Register -->
+  <div class="auth-form hidden" id="registerForm">
+    <div class="auth-field">
+      <label class="date-label">nombre</label>
+      <input type="text" id="regName" class="auth-input" placeholder="Tu nombre" maxlength="30"
+        onkeydown="if(event.key==='Enter') doRegister()" autocomplete="name" />
     </div>
-
-    <div>
-      <label>ícono</label>
-      <div class="emoji-picker" id="emojiPicker"></div>
-      <div style="margin-top:8px; display:flex; align-items:center; gap:8px;">
-        <label class="avatar-upload-btn" for="avatarFileInput">Subir foto</label>
-        <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="previewAvatar(this)" />
-        <img id="avatarPreview" class="avatar-preview" alt="avatar preview" />
-      </div>
+    <div class="auth-field">
+      <label class="date-label">correo</label>
+      <input type="email" id="regEmail" class="auth-input" placeholder="tu@correo.com"
+        onkeydown="if(event.key==='Enter') doRegister()" autocomplete="email" />
     </div>
-
-    <div>
-      <label>contraseña</label>
-      <input type="password" id="nuPass" placeholder="Mínimo 4 caracteres" maxlength="30" />
+    <div class="auth-field">
+      <label class="date-label">contraseña</label>
+      <input type="password" id="regPassword" class="auth-input" placeholder="Mínimo 6 caracteres"
+        onkeydown="if(event.key==='Enter') doRegister()" autocomplete="new-password" />
     </div>
-
-    <div class="modal-actions">
-      <button class="btn" onclick="closeNewUserModal()">Cancelar</button>
-      <button class="btn btn-primary" onclick="createUser()">Crear</button>
-    </div>
+    <p class="pw-error" id="registerError"></p>
+    <button class="btn btn-primary" onclick="doRegister()" id="registerBtn">Crear cuenta</button>
+    <p class="auth-switch">¿Ya tienes cuenta? <span onclick="showLogin()">Entrar</span></p>
   </div>
 </div>
 
@@ -785,7 +557,6 @@
 
     <hr class="divider" />
 
-    <!-- Photo blocks go here -->
     <div class="photo-blocks" id="photoBlocks"></div>
 
     <textarea class="entry-area" id="entryText"
@@ -842,40 +613,153 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <script>
 /* ══════════════════════════════════════
-   STORAGE KEYS & HELPERS
+   FIREBASE
 ══════════════════════════════════════ */
-const USERS_KEY  = 'diario_users_v3';
-const PREFS_KEY  = 'diario_prefs_v3';
+const firebaseConfig = {
+  apiKey: "AIzaSyASo1TnUhs-ZtMKNSu218J9VFaHyre5qDQ",
+  authDomain: "mi-diario-b106f.firebaseapp.com",
+  projectId: "mi-diario-b106f",
+  storageBucket: "mi-diario-b106f.firebasestorage.app",
+  messagingSenderId: "434581761458",
+  appId: "1:434581761458:web:4daf40ba8f4c91c2a308ab"
+};
 
-function loadUsers() {
-  try { return JSON.parse(localStorage.getItem(USERS_KEY) || '[]'); } catch(e) { return []; }
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+/* ══════════════════════════════════════
+   STATE
+══════════════════════════════════════ */
+let currentUser        = null;
+let unsubscribeEntries = null;
+let cachedEntries      = [];
+let currentFontKey     = 'lora';
+let currentColorKey    = 'cream';
+let currentSize        = 17;
+
+/* ══════════════════════════════════════
+   AUTH STATE LISTENER
+══════════════════════════════════════ */
+auth.onAuthStateChanged(user => {
+  if (user) {
+    currentUser = user;
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('appScreen').classList.add('visible');
+    initApp();
+  } else {
+    if (unsubscribeEntries) { unsubscribeEntries(); unsubscribeEntries = null; }
+    currentUser = null;
+    cachedEntries = [];
+    document.getElementById('appScreen').classList.remove('visible');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    showLogin();
+  }
+});
+
+/* ══════════════════════════════════════
+   LOGIN / REGISTER
+══════════════════════════════════════ */
+function showLogin() {
+  document.getElementById('registerForm').classList.add('hidden');
+  document.getElementById('loginForm').classList.remove('hidden');
+  document.getElementById('loginError').textContent = '';
+  setTimeout(() => document.getElementById('loginEmail').focus(), 50);
 }
-function saveUsers(arr) { localStorage.setItem(USERS_KEY, JSON.stringify(arr)); }
 
-function entriesKey(uid) { return 'diario_entries_v3_' + uid; }
-function loadEntries(uid) {
-  try { return JSON.parse(localStorage.getItem(entriesKey(uid)) || '[]'); } catch(e) { return []; }
+function showRegister() {
+  document.getElementById('loginForm').classList.add('hidden');
+  document.getElementById('registerForm').classList.remove('hidden');
+  document.getElementById('registerError').textContent = '';
+  setTimeout(() => document.getElementById('regName').focus(), 50);
 }
-function saveEntries(uid, arr) { localStorage.setItem(entriesKey(uid), JSON.stringify(arr)); }
 
-function loadPrefs(uid) {
-  try { return JSON.parse(localStorage.getItem(PREFS_KEY + '_' + uid) || '{}'); } catch(e) { return {}; }
+function fbError(code) {
+  const map = {
+    'auth/invalid-email':        'Correo inválido',
+    'auth/user-not-found':       'No hay cuenta con ese correo',
+    'auth/wrong-password':       'Contraseña incorrecta',
+    'auth/invalid-credential':   'Correo o contraseña incorrectos',
+    'auth/email-already-in-use': 'Ese correo ya está en uso',
+    'auth/weak-password':        'La contraseña debe tener al menos 6 caracteres',
+    'auth/too-many-requests':    'Demasiados intentos. Intenta más tarde',
+  };
+  return map[code] || 'Error. Intenta de nuevo';
 }
-function savePrefsData(uid, obj) { localStorage.setItem(PREFS_KEY + '_' + uid, JSON.stringify(obj)); }
 
-function uid() { return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPassword').value;
+  const errEl = document.getElementById('loginError');
+  const btn   = document.getElementById('loginBtn');
+  if (!email || !pass) { errEl.textContent = 'Completa los campos'; return; }
+  btn.textContent = '…'; btn.disabled = true;
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch(e) {
+    errEl.textContent = fbError(e.code);
+    btn.textContent = 'Entrar'; btn.disabled = false;
+  }
+}
 
+async function doRegister() {
+  const name  = document.getElementById('regName').value.trim();
+  const email = document.getElementById('regEmail').value.trim();
+  const pass  = document.getElementById('regPassword').value;
+  const errEl = document.getElementById('registerError');
+  const btn   = document.getElementById('registerBtn');
+  if (!name)  { errEl.textContent = 'Escribe tu nombre'; return; }
+  if (!email) { errEl.textContent = 'Escribe tu correo'; return; }
+  if (!pass)  { errEl.textContent = 'Escribe una contraseña'; return; }
+  btn.textContent = '…'; btn.disabled = true;
+  try {
+    const cred = await auth.createUserWithEmailAndPassword(email, pass);
+    await cred.user.updateProfile({ displayName: name });
+    // onAuthStateChanged handles the transition
+  } catch(e) {
+    errEl.textContent = fbError(e.code);
+    btn.textContent = 'Crear cuenta'; btn.disabled = false;
+  }
+}
+
+async function logout() {
+  if (!confirm('¿Cerrar sesión?')) return;
+  await auth.signOut();
+}
+
+/* ══════════════════════════════════════
+   PREFERENCES — localStorage (por dispositivo)
+══════════════════════════════════════ */
+const PREFS_KEY = 'diario_prefs_v3';
+function loadPrefs(uid)        { try { return JSON.parse(localStorage.getItem(PREFS_KEY+'_'+uid)||'{}'); } catch(e) { return {}; } }
+function savePrefsData(uid, o) { localStorage.setItem(PREFS_KEY+'_'+uid, JSON.stringify(o)); }
+
+/* ══════════════════════════════════════
+   FOTOS — localStorage (por dispositivo)
+══════════════════════════════════════ */
+function photosKey(uid, date)          { return 'diario_photos_v1_'+uid+'_'+date; }
+function loadPhotos(uid, date)         { try { return JSON.parse(localStorage.getItem(photosKey(uid,date))||'[]'); } catch(e) { return []; } }
+function savePhotosLocal(uid, date, p) { localStorage.setItem(photosKey(uid,date), JSON.stringify(p)); }
+
+/* ══════════════════════════════════════
+   HELPERS
+══════════════════════════════════════ */
 function todayISO() {
   const d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
 
 function fmtDate(iso) {
   const [y,m,d] = iso.split('-');
   const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-  return d + ' ' + months[+m-1] + ' ' + y;
+  return d+' '+months[+m-1]+' '+y;
 }
 
 function toast(msg) {
@@ -885,268 +769,73 @@ function toast(msg) {
   setTimeout(() => el.classList.remove('show'), 2200);
 }
 
-function hashPass(p) {
-  // simple hash — not crypto, but prevents plain text storage
-  let h = 0;
-  for (let i = 0; i < p.length; i++) { h = (Math.imul(31, h) + p.charCodeAt(i)) | 0; }
-  return h.toString(16);
-}
-
-/* ══════════════════════════════════════
-   STATE
-══════════════════════════════════════ */
-let currentUser = null;
-let pendingLoginUser = null;
-let selectedEmoji = '📖';
-let avatarDataUrl = null;
-let currentFontKey = 'lora';
-let currentColorKey = 'cream';
-let currentSize = 17;
-
-/* ══════════════════════════════════════
-   LOGIN SCREEN
-══════════════════════════════════════ */
-const EMOJIS = ['📖','✏️','🌸','🌙','☁️','🦋','🌿','🔮','🌊','⭐','🎨','🕯️'];
-
-function renderLoginScreen() {
-  const users = loadUsers();
-  const grid = document.getElementById('usersGrid');
-  grid.innerHTML = '';
-
-  users.forEach(u => {
-    const card = document.createElement('div');
-    card.className = 'user-card';
-    card.onclick = () => selectUser(u);
-
-    let avatarHtml;
-    if (u.avatar) {
-      avatarHtml = `<img src="${u.avatar}" alt="${u.name}" />`;
-    } else {
-      avatarHtml = u.emoji || '📖';
-    }
-
-    card.innerHTML = `
-      <div class="user-avatar">${avatarHtml}</div>
-      <span class="user-card-name">${u.name}</span>
-    `;
-    grid.appendChild(card);
-  });
-
-  // Add user button
-  const addCard = document.createElement('div');
-  addCard.className = 'add-user-card';
-  addCard.onclick = openNewUserModal;
-  addCard.innerHTML = `
-    <div class="add-user-icon">+</div>
-    <span class="add-user-label">Nuevo usuario</span>
-  `;
-  grid.appendChild(addCard);
-
-  document.getElementById('usersGrid').classList.remove('hidden');
-  document.getElementById('pwPrompt').classList.add('hidden');
-}
-
-function selectUser(u) {
-  pendingLoginUser = u;
-  document.getElementById('usersGrid').classList.add('hidden');
-  const prompt = document.getElementById('pwPrompt');
-  prompt.classList.remove('hidden');
-
-  // avatar
-  const avatarSm = document.getElementById('pwAvatarSm');
-  if (u.avatar) {
-    avatarSm.innerHTML = `<img src="${u.avatar}" alt="${u.name}" />`;
-  } else {
-    avatarSm.textContent = u.emoji || '📖';
-  }
-
-  document.getElementById('pwWho').textContent = u.name;
-  document.getElementById('pwInput').value = '';
-  document.getElementById('pwError').textContent = '';
-  buildPwDots('');
-  setTimeout(() => document.getElementById('pwInput').focus(), 100);
-}
-
-function buildPwDots(val) {
-  const dots = document.getElementById('pwDots');
-  const len = Math.min(val.length, 8);
-  dots.innerHTML = Array.from({length: 8}, (_,i) =>
-    `<div class="pw-dot ${i < len ? 'filled' : ''}"></div>`
-  ).join('');
-}
-
-function onPwInput() {
-  buildPwDots(document.getElementById('pwInput').value);
-  document.getElementById('pwError').textContent = '';
-}
-
-function tryLogin() {
-  const u = pendingLoginUser;
-  const pw = document.getElementById('pwInput').value;
-  if (hashPass(pw) !== u.passHash) {
-    document.getElementById('pwError').textContent = 'Contraseña incorrecta';
-    document.getElementById('pwInput').value = '';
-    buildPwDots('');
-    return;
-  }
-  currentUser = u;
-  document.getElementById('loginScreen').classList.add('hidden');
-  document.getElementById('appScreen').classList.add('visible');
-  initApp();
-}
-
-function backToUsers() {
-  pendingLoginUser = null;
-  document.getElementById('pwPrompt').classList.add('hidden');
-  document.getElementById('usersGrid').classList.remove('hidden');
-}
-
-function logout() {
-  if (!confirm('¿Cerrar sesión?')) return;
-  currentUser = null;
-  document.getElementById('appScreen').classList.remove('visible');
-  document.getElementById('loginScreen').classList.remove('hidden');
-  renderLoginScreen();
-}
-
-/* ══════════════════════════════════════
-   NEW USER MODAL
-══════════════════════════════════════ */
-function openNewUserModal() {
-  selectedEmoji = '📖';
-  avatarDataUrl = null;
-  document.getElementById('nuName').value = '';
-  document.getElementById('nuPass').value = '';
-  document.getElementById('avatarPreview').style.display = 'none';
-  document.getElementById('avatarPreview').src = '';
-  document.getElementById('avatarFileInput').value = '';
-  buildEmojiPicker();
-  document.getElementById('newUserModal').classList.add('open');
-  setTimeout(() => document.getElementById('nuName').focus(), 100);
-}
-
-function closeNewUserModal() {
-  document.getElementById('newUserModal').classList.remove('open');
-}
-
-function buildEmojiPicker() {
-  const el = document.getElementById('emojiPicker');
-  el.innerHTML = EMOJIS.map(e => `
-    <button class="emoji-btn ${e === selectedEmoji ? 'active' : ''}"
-      onclick="pickEmoji('${e}')">${e}</button>
-  `).join('');
-}
-
-function pickEmoji(e) {
-  selectedEmoji = e;
-  avatarDataUrl = null;
-  document.getElementById('avatarPreview').style.display = 'none';
-  buildEmojiPicker();
-}
-
-function previewAvatar(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    avatarDataUrl = e.target.result;
-    const img = document.getElementById('avatarPreview');
-    img.src = avatarDataUrl;
-    img.style.display = 'block';
-    // deselect emoji
-    document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active'));
-  };
-  reader.readAsDataURL(file);
-}
-
-function createUser() {
-  const name = document.getElementById('nuName').value.trim();
-  const pass = document.getElementById('nuPass').value;
-  if (!name) { toast('Escribe un nombre'); return; }
-  if (pass.length < 4) { toast('Contraseña muy corta (mín. 4)'); return; }
-  const users = loadUsers();
-  if (users.find(u => u.name.toLowerCase() === name.toLowerCase())) {
-    toast('Ese nombre ya existe'); return;
-  }
-  const newU = {
-    id: uid(),
-    name,
-    passHash: hashPass(pass),
-    emoji: avatarDataUrl ? null : selectedEmoji,
-    avatar: avatarDataUrl || null,
-  };
-  users.push(newU);
-  saveUsers(users);
-  closeNewUserModal();
-  renderLoginScreen();
-  toast('Usuario creado ✓');
-}
-
 /* ══════════════════════════════════════
    APP INIT
 ══════════════════════════════════════ */
 function initApp() {
-  // header
+  const name    = currentUser.displayName || currentUser.email.split('@')[0];
   const avatarEl = document.getElementById('currentUserAvatar');
-  if (currentUser.avatar) {
-    avatarEl.innerHTML = `<img src="${currentUser.avatar}" alt="${currentUser.name}" />`;
-  } else {
-    avatarEl.textContent = currentUser.emoji || '📖';
-  }
-  document.getElementById('currentUserName').textContent = currentUser.name;
+  avatarEl.textContent = name[0].toUpperCase();
+  document.getElementById('currentUserName').textContent = name;
 
-  // load prefs
-  const prefs = loadPrefs(currentUser.id);
+  const prefs = loadPrefs(currentUser.uid);
   if (prefs.color) applyColor(prefs.color);
   if (prefs.font)  applyFont(prefs.font);
-  if (prefs.size) {
-    document.getElementById('sizeSlider').value = prefs.size;
-    setFontSize(prefs.size);
-  }
+  if (prefs.size) { document.getElementById('sizeSlider').value = prefs.size; setFontSize(prefs.size); }
 
-  // init entry
-  document.getElementById('entryDate').value = todayISO();
-  document.getElementById('entryText').value = '';
+  document.getElementById('entryDate').value     = todayISO();
+  document.getElementById('entryText').value     = '';
+  document.getElementById('entryLocation').value = '';
   document.getElementById('photoBlocks').innerHTML = '';
   updateCount();
-  renderList();
+
+  if (unsubscribeEntries) unsubscribeEntries();
+  unsubscribeEntries = db.collection('users').doc(currentUser.uid)
+    .collection('entries')
+    .orderBy('date', 'desc')
+    .onSnapshot(snapshot => {
+      cachedEntries = snapshot.docs.map(d => d.data());
+      renderList();
+    });
 }
 
 /* ══════════════════════════════════════
-   SAVE / LOAD ENTRIES
+   SAVE / LOAD
 ══════════════════════════════════════ */
 const dot = document.getElementById('saveDot');
 function setDirty() { dot.classList.remove('saved'); dot.classList.add('dirty'); }
 function setSaved() { dot.classList.remove('dirty'); dot.classList.add('saved'); setTimeout(()=>dot.classList.remove('saved'),2500); }
 
 function collectPhotos() {
-  const blocks = document.querySelectorAll('.photo-block');
-  return Array.from(blocks).map(b => ({
-    src: b.querySelector('img').src,
+  return Array.from(document.querySelectorAll('.photo-block')).map(b => ({
+    src:     b.querySelector('img').src,
     caption: b.querySelector('.photo-caption').value,
   }));
 }
 
-function saveEntry() {
-  const date = document.getElementById('entryDate').value;
-  const text = document.getElementById('entryText').value.trim();
+async function saveEntry() {
+  const date     = document.getElementById('entryDate').value;
+  const text     = document.getElementById('entryText').value.trim();
   const location = document.getElementById('entryLocation').value.trim();
-  const photos = collectPhotos();
+  const photos   = collectPhotos();
   if (!text && !photos.length) { toast('Escribe algo o añade una foto'); return; }
-  const entries = loadEntries(currentUser.id);
-  const idx = entries.findIndex(e => e.date === date);
-  const entry = { date, text, location, photos, updated: Date.now() };
-  if (idx >= 0) { entries[idx] = entry; }
-  else { entries.unshift(entry); }
-  saveEntries(currentUser.id, entries);
-  setSaved();
-  toast('Guardado ✓');
-  renderList();
+
+  savePhotosLocal(currentUser.uid, date, photos);
+
+  try {
+    await db.collection('users').doc(currentUser.uid)
+      .collection('entries').doc(date)
+      .set({ date, text, location, updated: firebase.firestore.FieldValue.serverTimestamp() });
+    setSaved();
+    toast('Guardado ✓');
+  } catch(e) {
+    toast('Error al guardar');
+  }
 }
 
 function newEntry() {
-  document.getElementById('entryDate').value = todayISO();
-  document.getElementById('entryText').value = '';
+  document.getElementById('entryDate').value     = todayISO();
+  document.getElementById('entryText').value     = '';
   document.getElementById('entryLocation').value = '';
   document.getElementById('photoBlocks').innerHTML = '';
   updateCount();
@@ -1155,38 +844,40 @@ function newEntry() {
 }
 
 function loadEntry(date) {
-  const e = loadEntries(currentUser.id).find(e => e.date === date);
+  const e = cachedEntries.find(e => e.date === date);
   if (!e) return;
-  document.getElementById('entryDate').value = e.date;
-  document.getElementById('entryText').value = e.text || '';
+  document.getElementById('entryDate').value     = e.date;
+  document.getElementById('entryText').value     = e.text || '';
   document.getElementById('entryLocation').value = e.location || '';
   const container = document.getElementById('photoBlocks');
   container.innerHTML = '';
-  (e.photos || []).forEach(p => appendPhotoBlock(p.src, p.caption));
+  loadPhotos(currentUser.uid, date).forEach(p => appendPhotoBlock(p.src, p.caption));
   updateCount();
   dot.classList.remove('dirty','saved');
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-function deleteEntry(date) {
+async function deleteEntry(date) {
   if (!confirm('¿Eliminar esta entrada?')) return;
-  const entries = loadEntries(currentUser.id).filter(e => e.date !== date);
-  saveEntries(currentUser.id, entries);
-  if (document.getElementById('entryDate').value === date) newEntry();
-  toast('Entrada eliminada');
-  renderList();
+  try {
+    await db.collection('users').doc(currentUser.uid).collection('entries').doc(date).delete();
+    localStorage.removeItem(photosKey(currentUser.uid, date));
+    if (document.getElementById('entryDate').value === date) newEntry();
+    toast('Entrada eliminada');
+  } catch(e) {
+    toast('Error al eliminar');
+  }
 }
 
 function renderList() {
-  const entries = loadEntries(currentUser.id);
   const el = document.getElementById('entriesList');
-  if (!entries.length) {
+  if (!cachedEntries.length) {
     el.innerHTML = '<p class="empty-state">Aún no hay entradas guardadas.</p>';
     return;
   }
-  el.innerHTML = entries.map(e => {
-    const hasPhoto = e.photos && e.photos.length;
-    const preview = e.text ? e.text.substring(0,80) : (hasPhoto ? `[${e.photos.length} foto${e.photos.length>1?'s':''}]` : '');
+  el.innerHTML = cachedEntries.map(e => {
+    const photos      = loadPhotos(currentUser.uid, e.date);
+    const preview     = e.text ? e.text.substring(0,80) : (photos.length ? `[${photos.length} foto${photos.length>1?'s':''}]` : '');
     const locationHtml = e.location ? `<span class="entry-row-location">📍 ${e.location.replace(/</g,'&lt;')}</span>` : '';
     return `
       <div class="entry-row" onclick="loadEntry('${e.date}')">
@@ -1202,13 +893,9 @@ function renderList() {
    PHOTOS
 ══════════════════════════════════════ */
 function addPhotos(input) {
-  const files = Array.from(input.files);
-  files.forEach(file => {
+  Array.from(input.files).forEach(file => {
     const reader = new FileReader();
-    reader.onload = e => {
-      appendPhotoBlock(e.target.result, '');
-      setDirty();
-    };
+    reader.onload = e => { appendPhotoBlock(e.target.result, ''); setDirty(); };
     reader.readAsDataURL(file);
   });
   input.value = '';
@@ -1236,8 +923,8 @@ function updateCount() {
 document.getElementById('entryText').addEventListener('input', () => { updateCount(); setDirty(); });
 
 function downloadEntry() {
-  const date = document.getElementById('entryDate').value;
-  const text = document.getElementById('entryText').value.trim();
+  const date     = document.getElementById('entryDate').value;
+  const text     = document.getElementById('entryText').value.trim();
   const location = document.getElementById('entryLocation').value.trim();
   if (!text) { toast('Nada para descargar'); return; }
   const header = fmtDate(date) + (location ? '  ·  ' + location : '');
@@ -1245,12 +932,12 @@ function downloadEntry() {
 }
 
 function exportAll() {
-  const entries = loadEntries(currentUser.id);
-  if (!entries.length) { toast('No hay entradas aún'); return; }
-  const content = [...entries].sort((a,b) => a.date.localeCompare(b.date)).map(e => {
+  if (!cachedEntries.length) { toast('No hay entradas aún'); return; }
+  const content = [...cachedEntries].sort((a,b) => a.date.localeCompare(b.date)).map(e => {
     const header = fmtDate(e.date) + (e.location ? '  ·  ' + e.location : '');
+    const photos = loadPhotos(currentUser.uid, e.date);
     return header + '\n' + '─'.repeat(36) + '\n\n' + (e.text || '') +
-      (e.photos && e.photos.length ? '\n\n[' + e.photos.length + ' foto(s) en esta entrada]' : '');
+      (photos.length ? '\n\n[' + photos.length + ' foto(s) en esta entrada]' : '');
   }).join('\n\n\n');
   dl(content, 'mi-diario.txt');
   toast('Diario exportado');
@@ -1292,17 +979,15 @@ function applyColor(key) {
   const c = COLORS.find(x => x.key === key);
   if (!c) return;
   const r = document.documentElement.style;
-  r.setProperty('--bg', c.bg);
-  r.setProperty('--bg2', c.bg2);
-  r.setProperty('--ink', c.ink);
+  r.setProperty('--bg',   c.bg);
+  r.setProperty('--bg2',  c.bg2);
+  r.setProperty('--ink',  c.ink);
   r.setProperty('--ink2', c.ink2);
   r.setProperty('--ink3', c.ink3);
-  const isDark = parseInt(c.bg.slice(1,3),16) < 100;
-  r.setProperty('--cal-filter', isDark ? 'invert(1)' : 'none');
+  r.setProperty('--cal-filter', parseInt(c.bg.slice(1,3),16) < 100 ? 'invert(1)' : 'none');
   currentColorKey = key;
-  document.querySelectorAll('.color-swatch').forEach(el =>
-    el.classList.toggle('active', el.dataset.key === key));
-  if (currentUser) savePrefsData(currentUser.id, { ...loadPrefs(currentUser.id), color: key });
+  document.querySelectorAll('.color-swatch').forEach(el => el.classList.toggle('active', el.dataset.key === key));
+  if (currentUser) savePrefsData(currentUser.uid, { ...loadPrefs(currentUser.uid), color: key });
 }
 
 function applyFont(key) {
@@ -1311,16 +996,15 @@ function applyFont(key) {
   document.documentElement.style.setProperty('--font-body', f.css);
   document.querySelector('.entry-area').style.fontFamily = f.css;
   currentFontKey = key;
-  document.querySelectorAll('.font-option').forEach(el =>
-    el.classList.toggle('active', el.dataset.key === key));
-  if (currentUser) savePrefsData(currentUser.id, { ...loadPrefs(currentUser.id), font: key });
+  document.querySelectorAll('.font-option').forEach(el => el.classList.toggle('active', el.dataset.key === key));
+  if (currentUser) savePrefsData(currentUser.uid, { ...loadPrefs(currentUser.uid), font: key });
 }
 
 function setFontSize(val) {
   document.querySelector('.entry-area').style.fontSize = val + 'px';
   document.getElementById('sizeLabel').textContent = val;
   currentSize = +val;
-  if (currentUser) savePrefsData(currentUser.id, { ...loadPrefs(currentUser.id), size: +val });
+  if (currentUser) savePrefsData(currentUser.uid, { ...loadPrefs(currentUser.uid), size: +val });
 }
 
 function buildSettings() {
@@ -1341,14 +1025,9 @@ function buildSettings() {
   `).join('');
 }
 
-function openSettings() { buildSettings(); document.getElementById('settingsBackdrop').classList.add('open'); }
-function closeSettings() { document.getElementById('settingsBackdrop').classList.remove('open'); }
-function closeSettingsIfBackdrop(e) { if (e.target === document.getElementById('settingsBackdrop')) closeSettings(); }
-
-/* ══════════════════════════════════════
-   BOOT
-══════════════════════════════════════ */
-renderLoginScreen();
+function openSettings()              { buildSettings(); document.getElementById('settingsBackdrop').classList.add('open'); }
+function closeSettings()             { document.getElementById('settingsBackdrop').classList.remove('open'); }
+function closeSettingsIfBackdrop(e)  { if (e.target === document.getElementById('settingsBackdrop')) closeSettings(); }
 </script>
 </body>
 </html>
