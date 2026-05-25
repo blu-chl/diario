@@ -953,6 +953,7 @@ async function saveEntry() {
     await db.collection('users').doc(currentUser.uid).collection('entries').doc(date)
       .set({ date, text, location, updated: firebase.firestore.FieldValue.serverTimestamp() });
     setSaved(); toast('Guardado ✓');
+    newEntry();
   } catch(e) { toast('Error al guardar'); }
 }
 
