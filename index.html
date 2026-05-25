@@ -347,6 +347,7 @@
     </div>
     <p class="pw-error" id="pwError"></p>
     <button class="btn btn-primary" id="pwLoginBtn" onclick="tryLogin()">Entrar</button>
+    <span class="email-fallback" onclick="forgotPassword()">¿Olvidaste tu contraseña?</span>
   </div>
 
   <div class="email-login-form hidden" id="emailLoginForm">
@@ -658,6 +659,16 @@ function showEmailLogin() {
   document.getElementById('elPass').value = '';
   document.getElementById('elError').textContent = '';
   setTimeout(() => document.getElementById('elEmail').focus(), 50);
+}
+
+async function forgotPassword() {
+  if (!pendingProfile) return;
+  try {
+    await auth.sendPasswordResetEmail(pendingProfile.email);
+    toast('Revisa tu correo: ' + pendingProfile.email);
+  } catch(e) {
+    toast('No se pudo enviar el correo');
+  }
 }
 
 async function doEmailLogin() {
