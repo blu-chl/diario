@@ -11,25 +11,23 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #f5f0e8;
-      --bg2: #ede8de;
-      --ink: #1a1714;
-      --ink2: #6b6460;
-      --ink3: #a09890;
-      --accent: #8b6f47;
-      --line: rgba(0,0,0,0.08);
+      --bg: #f5f0e8; --bg2: #ede8de;
+      --ink: #1a1714; --ink2: #6b6460; --ink3: #a09890;
+      --accent: #8b6f47; --line: rgba(0,0,0,0.08);
       --font-body: 'Lora', Georgia, serif;
       --font-ui: 'Space Grotesk', sans-serif;
-      --radius: 3px;
-      --tr: 0.22s ease;
+      --radius: 3px; --tr: 0.22s ease;
     }
 
     body {
       background: var(--bg);
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
       color: var(--ink);
       font-family: var(--font-body);
       min-height: 100vh;
-      transition: background var(--tr), color var(--tr);
+      transition: background-color var(--tr), color var(--tr);
     }
 
     /* ── LOGIN SCREEN ── */
@@ -38,445 +36,293 @@
       background: var(--bg);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      z-index: 1000;
-      gap: 0;
+      z-index: 1000; gap: 0;
     }
-
     #loginScreen.hidden { display: none; }
 
     .login-title {
-      font-family: var(--font-body);
-      font-style: italic;
-      font-size: 15px;
-      color: var(--ink3);
-      letter-spacing: 0.08em;
-      margin-bottom: 2.5rem;
+      font-family: var(--font-body); font-style: italic;
+      font-size: 15px; color: var(--ink3);
+      letter-spacing: 0.08em; margin-bottom: 2.5rem;
     }
 
-    /* ── Auth forms ── */
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-      width: min(320px, 90vw);
-      padding: 0 1rem;
+    .users-grid {
+      display: flex; flex-wrap: wrap; gap: 1.5rem;
+      justify-content: center; max-width: 560px;
+      padding: 0 1rem; margin-bottom: 2rem;
+    }
+
+    .user-card {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+      cursor: pointer; padding: 12px;
+      border-radius: 8px; transition: background var(--tr);
+      min-width: 90px; position: relative;
+    }
+    .user-card:hover { background: var(--bg2); }
+
+    .user-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--bg2); border: 2px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; font-family: var(--font-ui); font-weight: 500;
+      color: var(--ink2); overflow: hidden; transition: border-color var(--tr);
+    }
+    .user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .user-card:hover .user-avatar { border-color: var(--ink3); }
+    .user-card-name { font-family: var(--font-ui); font-size: 12px; color: var(--ink2); text-align: center; }
+
+    .user-card-del {
+      position: absolute; top: 4px; right: 4px;
+      background: none; border: none;
+      font-size: 12px; color: var(--ink3);
+      cursor: pointer; opacity: 0; padding: 2px 4px;
+      border-radius: 50%; transition: opacity var(--tr);
+    }
+    .user-card:hover .user-card-del { opacity: 1; }
+    .user-card-del:hover { color: #b94040; }
+
+    .add-user-card {
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px; cursor: pointer;
+      padding: 12px; border-radius: 8px;
+      transition: background var(--tr); min-width: 90px;
+    }
+    .add-user-card:hover { background: var(--bg2); }
+    .add-user-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      border: 2px dashed var(--ink3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; color: var(--ink3);
+    }
+    .add-user-label { font-family: var(--font-ui); font-size: 12px; color: var(--ink3); }
+
+    .email-fallback {
+      font-family: var(--font-ui); font-size: 11px;
+      color: var(--ink3); text-decoration: underline;
+      cursor: pointer; margin-top: 0.25rem;
+    }
+    .email-fallback:hover { color: var(--ink2); }
+
+    /* Password prompt */
+    .pw-prompt { display: flex; flex-direction: column; align-items: center; gap: 12px; animation: fadeIn 0.18s ease; }
+    .pw-prompt.hidden { display: none; }
+    .pw-back { font-family: var(--font-ui); font-size: 11px; color: var(--ink3); cursor: pointer; letter-spacing: 0.06em; }
+    .pw-back:hover { color: var(--ink2); }
+    .pw-who { font-family: var(--font-body); font-style: italic; font-size: 16px; color: var(--ink2); }
+    .pw-avatar-sm {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--bg2); border: 2px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; overflow: hidden;
+    }
+    .pw-avatar-sm img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .pw-dots { display: flex; gap: 10px; }
+    .pw-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--ink3); transition: background var(--tr), border-color var(--tr); }
+    .pw-dot.filled { background: var(--ink); border-color: var(--ink); }
+    .pw-input-real {
+      width: 160px; text-align: center; font-size: 14px;
+      font-family: var(--font-ui); border: none;
+      border-bottom: 1px solid var(--line); background: transparent;
+      color: var(--ink); padding: 6px 0; outline: none;
+    }
+    .pw-input-real:focus { border-bottom-color: var(--ink3); }
+    .pw-error { font-family: var(--font-ui); font-size: 11px; color: #b94040; min-height: 16px; }
+
+    /* Email fallback form */
+    .email-login-form {
+      display: flex; flex-direction: column; gap: 1.25rem;
+      width: min(300px, 90vw); padding: 0 1rem;
       animation: fadeIn 0.18s ease;
     }
-
-    .auth-form.hidden { display: none; }
-
-    .auth-field {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
+    .email-login-form.hidden { display: none; }
+    .auth-field { display: flex; flex-direction: column; gap: 5px; }
     .auth-input {
-      font-family: var(--font-ui);
-      font-size: 14px;
-      color: var(--ink);
-      background: transparent;
-      border: none;
+      font-family: var(--font-ui); font-size: 14px; color: var(--ink);
+      background: transparent; border: none;
       border-bottom: 1px solid var(--line);
-      padding: 6px 0;
-      outline: none;
-      width: 100%;
+      padding: 6px 0; outline: none; width: 100%;
       transition: border-color var(--tr);
     }
-
     .auth-input:focus { border-bottom-color: var(--ink3); }
     .auth-input::placeholder { color: var(--ink3); }
+    .auth-switch { font-family: var(--font-ui); font-size: 11px; color: var(--ink3); text-align: center; }
+    .auth-switch span { color: var(--ink2); cursor: pointer; text-decoration: underline; }
 
-    .auth-switch {
-      font-family: var(--font-ui);
-      font-size: 11px;
-      color: var(--ink3);
-      text-align: center;
-      margin-top: 0.25rem;
+    /* New user modal */
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 2000; align-items: center; justify-content: center; }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      background: var(--bg); border: 1px solid var(--line);
+      border-radius: 8px; padding: 2rem 1.75rem;
+      width: min(360px, 92vw); display: flex;
+      flex-direction: column; gap: 1.25rem;
+      max-height: 92vh; overflow-y: auto;
     }
-
-    .auth-switch span {
-      color: var(--ink2);
-      cursor: pointer;
-      text-decoration: underline;
+    .modal-title { font-family: var(--font-ui); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); }
+    .modal label { font-family: var(--font-ui); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); display: block; margin-bottom: 5px; }
+    .modal input[type="text"], .modal input[type="password"], .modal input[type="email"] {
+      width: 100%; font-family: var(--font-ui); font-size: 14px;
+      color: var(--ink); background: transparent; border: none;
+      border-bottom: 1px solid var(--line); padding: 6px 0; outline: none;
     }
-
-    .auth-switch span:hover { color: var(--ink); }
-
-    .pw-error {
-      font-family: var(--font-ui);
-      font-size: 11px;
-      color: #b94040;
-      min-height: 16px;
+    .modal input:focus { border-bottom-color: var(--ink3); }
+    .emoji-picker { display: flex; flex-wrap: wrap; gap: 6px; }
+    .emoji-btn {
+      width: 34px; height: 34px; border: 1px solid var(--line);
+      background: transparent; border-radius: var(--radius);
+      font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background var(--tr);
     }
+    .emoji-btn:hover, .emoji-btn.active { background: var(--bg2); border-color: var(--ink3); }
+    .avatar-upload-btn {
+      font-family: var(--font-ui); font-size: 11px; color: var(--ink3);
+      border: 1px dashed var(--ink3); background: transparent;
+      padding: 6px 12px; border-radius: var(--radius);
+      cursor: pointer; display: inline-block; text-align: center;
+    }
+    .avatar-preview { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); display: none; }
+    .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+    .modal-error { font-family: var(--font-ui); font-size: 11px; color: #b94040; min-height: 16px; }
 
     /* ── APP ── */
     #appScreen { display: none; }
     #appScreen.visible { display: block; }
 
     .page {
-      max-width: 680px;
-      margin: 0 auto;
+      max-width: 680px; margin: 0 auto;
       padding: 3rem 2rem 6rem;
+      background: var(--bg);
+      transition: box-shadow 0.3s;
+    }
+    body.has-wallpaper .page {
+      box-shadow: 0 0 60px rgba(0,0,0,0.18);
+      min-height: 100vh;
     }
 
     .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 3rem;
-      padding-bottom: 1rem;
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 3rem; padding-bottom: 1rem;
       border-bottom: 1px solid var(--line);
     }
-
-    .site-name {
-      font-family: var(--font-body);
-      font-size: 13px;
-      letter-spacing: 0.15em;
-      text-transform: lowercase;
-      color: var(--ink2);
-      font-style: italic;
-    }
-
+    .site-name { font-family: var(--font-body); font-size: 13px; letter-spacing: 0.15em; text-transform: lowercase; color: var(--ink2); font-style: italic; }
     .top-actions { display: flex; gap: 6px; align-items: center; }
-
     .current-user {
       display: flex; align-items: center; gap: 6px;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 20px;
-      border: 1px solid var(--line);
+      cursor: pointer; padding: 4px 8px;
+      border-radius: 20px; border: 1px solid var(--line);
       transition: background var(--tr);
     }
-
     .current-user:hover { background: var(--bg2); }
-
     .current-user-avatar {
-      width: 22px; height: 22px;
-      border-radius: 50%;
-      background: var(--bg2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px;
-      font-family: var(--font-ui);
-      font-weight: 500;
-      color: var(--ink2);
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--bg2); display: flex;
+      align-items: center; justify-content: center;
+      font-size: 13px; overflow: hidden;
     }
-
-    .current-user-name {
-      font-family: var(--font-ui);
-      font-size: 11px;
-      color: var(--ink2);
-    }
+    .current-user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+    .current-user-name { font-family: var(--font-ui); font-size: 11px; color: var(--ink2); }
 
     .btn {
-      font-family: var(--font-ui);
-      font-size: 11px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      padding: 6px 12px;
-      border: 1px solid var(--line);
-      background: transparent;
-      color: var(--ink2);
-      cursor: pointer;
-      border-radius: var(--radius);
+      font-family: var(--font-ui); font-size: 11px;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 6px 12px; border: 1px solid var(--line);
+      background: transparent; color: var(--ink2);
+      cursor: pointer; border-radius: var(--radius);
       transition: all var(--tr);
-      display: inline-flex; align-items: center; gap: 5px;
-      white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
     }
-
     .btn:hover { background: var(--bg2); color: var(--ink); border-color: rgba(0,0,0,0.15); }
-
-    .btn-primary {
-      background: var(--ink); color: var(--bg); border-color: transparent;
-    }
-
+    .btn-primary { background: var(--ink); color: var(--bg); border-color: transparent; }
     .btn-primary:hover { opacity: 0.82; background: var(--ink); color: var(--bg); }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .date-wrap { margin-bottom: 0.5rem; }
-
-    .date-label {
-      font-family: var(--font-ui);
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--ink3);
-      margin-bottom: 6px;
-      display: block;
-    }
-
-    input[type="date"] {
-      font-family: var(--font-ui);
-      font-size: 13px;
-      color: var(--ink);
-      background: transparent;
-      border: none;
-      outline: none;
-      padding: 2px 0;
-      cursor: pointer;
-    }
-
-    input[type="date"]::-webkit-calendar-picker-indicator {
-      opacity: 0.35;
-      cursor: pointer;
-      filter: var(--cal-filter, none);
-    }
+    .date-label { font-family: var(--font-ui); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; display: block; }
+    input[type="date"] { font-family: var(--font-ui); font-size: 13px; color: var(--ink); background: transparent; border: none; outline: none; padding: 2px 0; cursor: pointer; }
+    input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.35; cursor: pointer; filter: var(--cal-filter, none); }
 
     .location-wrap { margin-bottom: 0.5rem; }
-
-    .location-input {
-      font-family: var(--font-ui);
-      font-size: 13px;
-      color: var(--ink);
-      background: transparent;
-      border: none;
-      outline: none;
-      padding: 2px 0;
-      width: 100%;
-      border-bottom: 1px solid transparent;
-      transition: border-color var(--tr);
-    }
-
+    .location-input { font-family: var(--font-ui); font-size: 13px; color: var(--ink); background: transparent; border: none; outline: none; padding: 2px 0; width: 100%; border-bottom: 1px solid transparent; transition: border-color var(--tr); }
     .location-input:focus { border-bottom-color: var(--line); }
     .location-input::placeholder { color: var(--ink3); }
 
     .divider { border: none; border-top: 1px solid var(--line); margin: 1rem 0 1.5rem; }
 
-    /* ── Photo blocks ── */
     .photo-blocks { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 1.5rem; }
-
-    .photo-block {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      padding: 0.75rem;
-      position: relative;
-    }
-
-    .photo-block img {
-      width: 100%;
-      max-height: 480px;
-      object-fit: cover;
-      border-radius: 2px;
-      display: block;
-    }
-
-    .photo-caption {
-      font-family: var(--font-body);
-      font-size: 14px;
-      font-style: italic;
-      color: var(--ink2);
-      background: transparent;
-      border: none;
-      outline: none;
-      width: 100%;
-      resize: none;
-      line-height: 1.6;
-      padding: 4px 0;
-      border-bottom: 1px solid transparent;
-      transition: border-color var(--tr);
-    }
-
+    .photo-block { display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--line); border-radius: 4px; padding: 0.75rem; position: relative; }
+    .photo-block img { width: 100%; max-height: 480px; object-fit: cover; border-radius: 2px; display: block; }
+    .photo-caption { font-family: var(--font-body); font-size: 14px; font-style: italic; color: var(--ink2); background: transparent; border: none; outline: none; width: 100%; resize: none; line-height: 1.6; padding: 4px 0; border-bottom: 1px solid transparent; transition: border-color var(--tr); }
     .photo-caption:focus { border-bottom-color: var(--line); }
     .photo-caption::placeholder { color: var(--ink3); }
-
-    .photo-block-del {
-      position: absolute;
-      top: 6px; right: 6px;
-      background: rgba(0,0,0,0.45);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 22px; height: 22px;
-      font-size: 11px;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0;
-      transition: opacity var(--tr);
-    }
-
+    .photo-block-del { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.45); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity var(--tr); }
     .photo-block:hover .photo-block-del { opacity: 1; }
 
-    .entry-area {
-      width: 100%;
-      min-height: 320px;
-      resize: none;
-      font-family: var(--font-body);
-      font-size: 17px;
-      line-height: 1.9;
-      color: var(--ink);
-      background: transparent;
-      border: none;
-      outline: none;
-      display: block;
-    }
-
+    .entry-area { width: 100%; min-height: 320px; resize: none; font-family: var(--font-body); font-size: 17px; line-height: 1.9; color: var(--ink); background: transparent; border: none; outline: none; display: block; }
     .entry-area::placeholder { color: var(--ink3); font-style: italic; }
 
-    .toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 2rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--line);
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
+    .toolbar { display: flex; align-items: center; justify-content: space-between; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); flex-wrap: wrap; gap: 8px; }
     .toolbar-left { display: flex; gap: 6px; flex-wrap: wrap; }
     .toolbar-right { display: flex; gap: 6px; align-items: center; }
-
     .char-count { font-family: var(--font-ui); font-size: 11px; color: var(--ink3); }
-
-    .save-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--ink3);
-      display: inline-block;
-      margin-right: 4px;
-      transition: background var(--tr);
-    }
-
+    .save-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink3); display: inline-block; margin-right: 4px; transition: background var(--tr); }
     .save-dot.dirty { background: #c07a30; }
     .save-dot.saved { background: #5a9a6a; }
 
-    /* ── Entries list ── */
     .entries-section { margin-top: 3.5rem; padding-top: 2rem; border-top: 1px solid var(--line); }
-
-    .section-label {
-      font-family: var(--font-ui);
-      font-size: 10px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink3);
-      margin-bottom: 1.25rem;
-    }
-
-    .entry-row {
-      display: flex;
-      align-items: baseline;
-      gap: 12px;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--line);
-      cursor: pointer;
-      transition: opacity var(--tr);
-    }
-
+    .section-label { font-family: var(--font-ui); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); margin-bottom: 1.25rem; }
+    .entry-row { display: flex; align-items: baseline; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); cursor: pointer; transition: opacity var(--tr); }
     .entry-row:last-child { border-bottom: none; }
     .entry-row:hover { opacity: 0.7; }
-
     .entry-row-date { font-family: var(--font-ui); font-size: 11px; color: var(--ink3); min-width: 90px; }
     .entry-row-preview { font-family: var(--font-body); font-size: 14px; color: var(--ink2); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-style: italic; }
     .entry-row-location { font-family: var(--font-ui); font-size: 11px; color: var(--ink3); font-style: normal; }
-
-    .entry-row-del {
-      font-family: var(--font-ui);
-      font-size: 11px;
-      color: var(--ink3);
-      background: none; border: none;
-      cursor: pointer;
-      padding: 2px 6px;
-      border-radius: 2px;
-      opacity: 0;
-      transition: opacity var(--tr);
-    }
-
+    .entry-row-del { font-family: var(--font-ui); font-size: 11px; color: var(--ink3); background: none; border: none; cursor: pointer; padding: 2px 6px; border-radius: 2px; opacity: 0; transition: opacity var(--tr); }
     .entry-row:hover .entry-row-del { opacity: 1; }
     .entry-row-del:hover { color: #b94040; }
-
     .empty-state { font-family: var(--font-body); font-style: italic; color: var(--ink3); font-size: 14px; padding: 1rem 0; }
 
     /* ── Settings panel ── */
-    .settings-backdrop {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.35);
-      z-index: 500;
-      align-items: flex-start;
-      justify-content: flex-end;
-    }
-
+    .settings-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 500; align-items: flex-start; justify-content: flex-end; }
     .settings-backdrop.open { display: flex; }
-
-    .settings-panel {
-      background: var(--bg);
-      border-left: 1px solid var(--line);
-      width: min(320px, 92vw);
-      height: 100vh;
-      overflow-y: auto;
-      padding: 2rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      animation: slideIn 0.22s ease;
-    }
-
-    @keyframes slideIn { from { transform: translateX(100%); opacity:0; } to { transform: translateX(0); opacity:1; } }
-    @keyframes fadeIn  { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
+    .settings-panel { background: var(--bg); border-left: 1px solid var(--line); width: min(320px, 92vw); height: 100vh; overflow-y: auto; padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 2rem; animation: slideIn 0.22s ease; }
     .settings-title { font-family: var(--font-ui); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); margin-bottom: 0.75rem; }
-
     .font-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-
-    .font-option {
-      border: 1px solid var(--line);
-      background: transparent;
-      padding: 10px 10px 8px;
-      cursor: pointer;
-      border-radius: var(--radius);
-      text-align: left;
-      transition: all var(--tr);
-    }
-
+    .font-option { border: 1px solid var(--line); background: transparent; padding: 10px 10px 8px; cursor: pointer; border-radius: var(--radius); text-align: left; transition: all var(--tr); }
     .font-option:hover { border-color: rgba(0,0,0,0.2); }
     .font-option.active { border-color: var(--ink); background: var(--bg2); }
-
     .font-option-name { font-family: var(--font-ui); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); display: block; margin-bottom: 4px; }
     .font-option-sample { font-size: 16px; color: var(--ink); line-height: 1.2; }
-
     .color-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-
-    .color-swatch {
-      aspect-ratio: 1;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      cursor: pointer;
-      transition: transform var(--tr), border-color var(--tr);
-    }
-
+    .color-swatch { aspect-ratio: 1; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform var(--tr), border-color var(--tr); }
     .color-swatch:hover { transform: scale(1.1); }
     .color-swatch.active { border-color: var(--ink); transform: scale(1.05); }
-
     .size-row { display: flex; align-items: center; gap: 10px; }
     .size-row input[type="range"] { flex: 1; accent-color: var(--ink); cursor: pointer; }
     .size-label { font-family: var(--font-ui); font-size: 11px; color: var(--ink2); min-width: 24px; text-align: right; }
 
-    /* ── Toast ── */
-    .toast {
-      position: fixed;
-      bottom: 2rem; left: 50%;
-      transform: translateX(-50%) translateY(8px);
-      background: var(--ink); color: var(--bg);
-      font-family: var(--font-ui);
-      font-size: 12px;
-      padding: 9px 18px;
-      border-radius: 20px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s, transform 0.25s;
-      white-space: nowrap;
-      z-index: 3000;
+    /* Wallpaper controls */
+    .wallpaper-preview {
+      width: 100%; height: 80px; border-radius: 4px;
+      border: 1px solid var(--line); background-size: cover;
+      background-position: center; margin-bottom: 8px;
+      display: none; position: relative;
     }
+    .wallpaper-preview.visible { display: block; }
 
+    /* ── Toast ── */
+    .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--ink); color: var(--bg); font-family: var(--font-ui); font-size: 12px; padding: 9px 18px; border-radius: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; white-space: nowrap; z-index: 3000; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @keyframes slideIn { from { transform: translateX(100%); opacity:0; } to { transform: translateX(0); opacity:1; } }
+    @keyframes fadeIn  { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
     @media (max-width: 480px) {
       .page { padding: 2rem 1.25rem 5rem; }
       .entry-area { font-size: 16px; min-height: 260px; }
       .font-grid { grid-template-columns: 1fr; }
+      .users-grid { gap: 1rem; }
     }
   </style>
 </head>
@@ -485,51 +331,75 @@
 <!-- ══════════════════ LOGIN SCREEN ══════════════════ -->
 <div id="loginScreen">
   <p class="login-title">mi diario</p>
+  <div class="users-grid" id="usersGrid"></div>
+  <span class="email-fallback" id="emailFallbackLink" onclick="showEmailLogin()">Iniciar con correo</span>
 
-  <!-- Login -->
-  <div class="auth-form" id="loginForm">
-    <div class="auth-field">
-      <label class="date-label">correo</label>
-      <input type="email" id="loginEmail" class="auth-input" placeholder="tu@correo.com"
-        onkeydown="if(event.key==='Enter') doLogin()" autocomplete="email" />
+  <div class="pw-prompt hidden" id="pwPrompt">
+    <span class="pw-back" onclick="backToUsers()">← volver</span>
+    <div class="pw-avatar-sm" id="pwAvatarSm"></div>
+    <span class="pw-who" id="pwWho"></span>
+    <div>
+      <div class="pw-dots" id="pwDots"></div>
+      <input type="password" class="pw-input-real" id="pwInput"
+        placeholder="contraseña" maxlength="30"
+        oninput="onPwInput()"
+        onkeydown="if(event.key==='Enter') tryLogin()" />
     </div>
-    <div class="auth-field">
-      <label class="date-label">contraseña</label>
-      <input type="password" id="loginPassword" class="auth-input" placeholder="••••••••"
-        onkeydown="if(event.key==='Enter') doLogin()" autocomplete="current-password" />
-    </div>
-    <p class="pw-error" id="loginError"></p>
-    <button class="btn btn-primary" onclick="doLogin()" id="loginBtn">Entrar</button>
-    <p class="auth-switch">¿Sin cuenta? <span onclick="showRegister()">Crear una</span></p>
+    <p class="pw-error" id="pwError"></p>
+    <button class="btn btn-primary" id="pwLoginBtn" onclick="tryLogin()">Entrar</button>
   </div>
 
-  <!-- Register -->
-  <div class="auth-form hidden" id="registerForm">
-    <div class="auth-field">
-      <label class="date-label">nombre</label>
-      <input type="text" id="regName" class="auth-input" placeholder="Tu nombre" maxlength="30"
-        onkeydown="if(event.key==='Enter') doRegister()" autocomplete="name" />
-    </div>
+  <div class="email-login-form hidden" id="emailLoginForm">
+    <span class="pw-back" onclick="backToUsers()">← volver</span>
     <div class="auth-field">
       <label class="date-label">correo</label>
-      <input type="email" id="regEmail" class="auth-input" placeholder="tu@correo.com"
-        onkeydown="if(event.key==='Enter') doRegister()" autocomplete="email" />
+      <input type="email" id="elEmail" class="auth-input" placeholder="tu@correo.com" onkeydown="if(event.key==='Enter') doEmailLogin()" />
     </div>
     <div class="auth-field">
       <label class="date-label">contraseña</label>
-      <input type="password" id="regPassword" class="auth-input" placeholder="Mínimo 6 caracteres"
-        onkeydown="if(event.key==='Enter') doRegister()" autocomplete="new-password" />
+      <input type="password" id="elPass" class="auth-input" placeholder="••••••••" onkeydown="if(event.key==='Enter') doEmailLogin()" />
     </div>
-    <p class="pw-error" id="registerError"></p>
-    <button class="btn btn-primary" onclick="doRegister()" id="registerBtn">Crear cuenta</button>
-    <p class="auth-switch">¿Ya tienes cuenta? <span onclick="showLogin()">Entrar</span></p>
+    <p class="pw-error" id="elError"></p>
+    <button class="btn btn-primary" id="elBtn" onclick="doEmailLogin()">Entrar</button>
+  </div>
+</div>
+
+<!-- ══════════════════ NEW PROFILE MODAL ══════════════════ -->
+<div class="modal-backdrop" id="newUserModal">
+  <div class="modal">
+    <div class="modal-title">nuevo perfil</div>
+    <div>
+      <label>nombre</label>
+      <input type="text" id="nuName" placeholder="Tu nombre" maxlength="20" />
+    </div>
+    <div>
+      <label>correo</label>
+      <input type="email" id="nuEmail" placeholder="tu@correo.com" />
+    </div>
+    <div>
+      <label>contraseña</label>
+      <input type="password" id="nuPass" placeholder="Mínimo 6 caracteres" maxlength="30" />
+    </div>
+    <div>
+      <label>ícono</label>
+      <div class="emoji-picker" id="emojiPicker"></div>
+      <div style="margin-top:8px; display:flex; align-items:center; gap:8px;">
+        <label class="avatar-upload-btn" for="avatarFileInput">Subir foto</label>
+        <input type="file" id="avatarFileInput" accept="image/*" style="display:none" onchange="previewAvatar(this)" />
+        <img id="avatarPreview" class="avatar-preview" alt="preview" />
+      </div>
+    </div>
+    <p class="modal-error" id="nuError"></p>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeNewUserModal()">Cancelar</button>
+      <button class="btn btn-primary" id="nuBtn" onclick="createUser()">Crear</button>
+    </div>
   </div>
 </div>
 
 <!-- ══════════════════ APP SCREEN ══════════════════ -->
 <div id="appScreen">
   <div class="page">
-
     <div class="top-bar">
       <span class="site-name">mi diario</span>
       <div class="top-actions">
@@ -547,22 +417,15 @@
       <label class="date-label" for="entryDate">fecha</label>
       <input type="date" id="entryDate" />
     </div>
-
     <div class="location-wrap">
       <label class="date-label" for="entryLocation">ubicación</label>
       <input type="text" class="location-input" id="entryLocation"
         placeholder="¿Dónde estás?" maxlength="80"
         oninput="setDirty()" autocomplete="off" />
     </div>
-
     <hr class="divider" />
-
     <div class="photo-blocks" id="photoBlocks"></div>
-
-    <textarea class="entry-area" id="entryText"
-      placeholder="¿Qué pasó hoy?"
-      spellcheck="true"
-      aria-label="Entrada del diario"></textarea>
+    <textarea class="entry-area" id="entryText" placeholder="¿Qué pasó hoy?" spellcheck="true"></textarea>
 
     <div class="toolbar">
       <div class="toolbar-left">
@@ -583,13 +446,23 @@
       <div class="section-label">entradas anteriores</div>
       <div id="entriesList"></div>
     </div>
-
   </div>
 </div>
 
 <!-- Settings panel -->
 <div class="settings-backdrop" id="settingsBackdrop" onclick="closeSettingsIfBackdrop(event)">
   <div class="settings-panel">
+    <div>
+      <div class="settings-title">fondo de pantalla</div>
+      <div class="wallpaper-preview" id="wallpaperPreview"></div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+        <label class="btn" style="cursor:pointer;">
+          🖼 Subir imagen
+          <input type="file" accept="image/*" style="display:none" onchange="setWallpaperFromFile(this)" />
+        </label>
+        <button class="btn" id="removeWallpaperBtn" onclick="removeWallpaper()" style="display:none;">Quitar</button>
+      </div>
+    </div>
     <div>
       <div class="settings-title">fuente</div>
       <div class="font-grid" id="fontGrid"></div>
@@ -622,16 +495,14 @@
 /* ══════════════════════════════════════
    FIREBASE
 ══════════════════════════════════════ */
-const firebaseConfig = {
+firebase.initializeApp({
   apiKey: "AIzaSyASo1TnUhs-ZtMKNSu218J9VFaHyre5qDQ",
   authDomain: "mi-diario-b106f.firebaseapp.com",
   projectId: "mi-diario-b106f",
   storageBucket: "mi-diario-b106f.firebasestorage.app",
   messagingSenderId: "434581761458",
   appId: "1:434581761458:web:4daf40ba8f4c91c2a308ab"
-};
-
-firebase.initializeApp(firebaseConfig);
+});
 const auth = firebase.auth();
 const db   = firebase.firestore();
 
@@ -639,46 +510,244 @@ const db   = firebase.firestore();
    STATE
 ══════════════════════════════════════ */
 let currentUser        = null;
+let pendingProfile     = null;
 let unsubscribeEntries = null;
 let cachedEntries      = [];
 let currentFontKey     = 'lora';
 let currentColorKey    = 'cream';
 let currentSize        = 17;
+let selectedEmoji      = '📖';
+let avatarDataUrl      = null;
 
 /* ══════════════════════════════════════
-   AUTH STATE LISTENER
+   PROFILES (localStorage)
+══════════════════════════════════════ */
+const PROFILES_KEY = 'diario_profiles_v4';
+function loadProfiles()      { try { return JSON.parse(localStorage.getItem(PROFILES_KEY)||'[]'); } catch(e) { return []; } }
+function saveProfiles(arr)   { localStorage.setItem(PROFILES_KEY, JSON.stringify(arr)); }
+
+function getProfile(uid) {
+  return loadProfiles().find(p => p.id === uid) || null;
+}
+
+/* ══════════════════════════════════════
+   AUTH STATE
 ══════════════════════════════════════ */
 auth.onAuthStateChanged(user => {
   if (user) {
     currentUser = user;
+    // Ensure profile exists locally
+    let profiles = loadProfiles();
+    if (!profiles.find(p => p.id === user.uid)) {
+      profiles.push({
+        id: user.uid,
+        name: user.displayName || user.email.split('@')[0],
+        emoji: '📖', avatar: null,
+        email: user.email
+      });
+      saveProfiles(profiles);
+    }
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('appScreen').classList.add('visible');
     initApp();
   } else {
     if (unsubscribeEntries) { unsubscribeEntries(); unsubscribeEntries = null; }
-    currentUser = null;
-    cachedEntries = [];
+    currentUser = null; cachedEntries = [];
     document.getElementById('appScreen').classList.remove('visible');
     document.getElementById('loginScreen').classList.remove('hidden');
-    showLogin();
+    renderLoginScreen();
   }
 });
 
 /* ══════════════════════════════════════
-   LOGIN / REGISTER
+   LOGIN SCREEN
 ══════════════════════════════════════ */
-function showLogin() {
-  document.getElementById('registerForm').classList.add('hidden');
-  document.getElementById('loginForm').classList.remove('hidden');
-  document.getElementById('loginError').textContent = '';
-  setTimeout(() => document.getElementById('loginEmail').focus(), 50);
+const EMOJIS = ['📖','✏️','🌸','🌙','☁️','🦋','🌿','🔮','🌊','⭐','🎨','🕯️'];
+
+function renderLoginScreen() {
+  const profiles = loadProfiles();
+  const grid = document.getElementById('usersGrid');
+  grid.innerHTML = '';
+
+  profiles.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'user-card';
+    card.onclick = () => selectProfile(p);
+    const avatarHtml = p.avatar ? `<img src="${p.avatar}" alt="${p.name}" />` : (p.emoji || '📖');
+    card.innerHTML = `
+      <div class="user-avatar">${avatarHtml}</div>
+      <span class="user-card-name">${p.name}</span>
+      <button class="user-card-del" onclick="event.stopPropagation();removeProfile('${p.id}')" title="Quitar perfil">✕</button>
+    `;
+    grid.appendChild(card);
+  });
+
+  const addCard = document.createElement('div');
+  addCard.className = 'add-user-card';
+  addCard.onclick = openNewUserModal;
+  addCard.innerHTML = `<div class="add-user-icon">+</div><span class="add-user-label">Nuevo perfil</span>`;
+  grid.appendChild(addCard);
+
+  document.getElementById('usersGrid').classList.remove('hidden');
+  document.getElementById('pwPrompt').classList.add('hidden');
+  document.getElementById('emailLoginForm').classList.add('hidden');
+  document.getElementById('emailFallbackLink').style.display = '';
 }
 
-function showRegister() {
-  document.getElementById('loginForm').classList.add('hidden');
-  document.getElementById('registerForm').classList.remove('hidden');
-  document.getElementById('registerError').textContent = '';
-  setTimeout(() => document.getElementById('regName').focus(), 50);
+function removeProfile(id) {
+  if (!confirm('¿Quitar este perfil de esta pantalla?\n(No elimina la cuenta ni los datos)')) return;
+  const profiles = loadProfiles().filter(p => p.id !== id);
+  saveProfiles(profiles);
+  renderLoginScreen();
+}
+
+function selectProfile(p) {
+  pendingProfile = p;
+  document.getElementById('usersGrid').classList.add('hidden');
+  document.getElementById('emailFallbackLink').style.display = 'none';
+  const prompt = document.getElementById('pwPrompt');
+  prompt.classList.remove('hidden');
+  const avatarSm = document.getElementById('pwAvatarSm');
+  avatarSm.innerHTML = p.avatar ? `<img src="${p.avatar}" alt="${p.name}" />` : (p.emoji || '📖');
+  document.getElementById('pwWho').textContent = p.name;
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwError').textContent = '';
+  document.getElementById('pwLoginBtn').textContent = 'Entrar';
+  document.getElementById('pwLoginBtn').disabled = false;
+  buildPwDots('');
+  setTimeout(() => document.getElementById('pwInput').focus(), 100);
+}
+
+function buildPwDots(val) {
+  const len = Math.min(val.length, 8);
+  document.getElementById('pwDots').innerHTML = Array.from({length:8}, (_,i) =>
+    `<div class="pw-dot ${i < len ? 'filled' : ''}"></div>`
+  ).join('');
+}
+
+function onPwInput() {
+  buildPwDots(document.getElementById('pwInput').value);
+  document.getElementById('pwError').textContent = '';
+}
+
+async function tryLogin() {
+  const pw  = document.getElementById('pwInput').value;
+  const btn = document.getElementById('pwLoginBtn');
+  if (!pw) return;
+  btn.textContent = '…'; btn.disabled = true;
+  try {
+    await auth.signInWithEmailAndPassword(pendingProfile.email, pw);
+  } catch(e) {
+    document.getElementById('pwError').textContent = fbError(e.code);
+    btn.textContent = 'Entrar'; btn.disabled = false;
+    document.getElementById('pwInput').value = '';
+    buildPwDots('');
+  }
+}
+
+function backToUsers() {
+  pendingProfile = null;
+  renderLoginScreen();
+}
+
+function showEmailLogin() {
+  document.getElementById('usersGrid').classList.add('hidden');
+  document.getElementById('emailFallbackLink').style.display = 'none';
+  document.getElementById('emailLoginForm').classList.remove('hidden');
+  document.getElementById('elEmail').value = '';
+  document.getElementById('elPass').value = '';
+  document.getElementById('elError').textContent = '';
+  setTimeout(() => document.getElementById('elEmail').focus(), 50);
+}
+
+async function doEmailLogin() {
+  const email = document.getElementById('elEmail').value.trim();
+  const pass  = document.getElementById('elPass').value;
+  const btn   = document.getElementById('elBtn');
+  if (!email || !pass) { document.getElementById('elError').textContent = 'Completa los campos'; return; }
+  btn.textContent = '…'; btn.disabled = true;
+  try {
+    await auth.signInWithEmailAndPassword(email, pass);
+  } catch(e) {
+    document.getElementById('elError').textContent = fbError(e.code);
+    btn.textContent = 'Entrar'; btn.disabled = false;
+  }
+}
+
+/* ══════════════════════════════════════
+   NEW PROFILE MODAL
+══════════════════════════════════════ */
+function openNewUserModal() {
+  selectedEmoji = '📖'; avatarDataUrl = null;
+  document.getElementById('nuName').value  = '';
+  document.getElementById('nuEmail').value = '';
+  document.getElementById('nuPass').value  = '';
+  document.getElementById('nuError').textContent = '';
+  document.getElementById('nuBtn').textContent = 'Crear';
+  document.getElementById('nuBtn').disabled = false;
+  document.getElementById('avatarPreview').style.display = 'none';
+  document.getElementById('avatarPreview').src = '';
+  document.getElementById('avatarFileInput').value = '';
+  buildEmojiPicker();
+  document.getElementById('newUserModal').classList.add('open');
+  setTimeout(() => document.getElementById('nuName').focus(), 100);
+}
+
+function closeNewUserModal() { document.getElementById('newUserModal').classList.remove('open'); }
+
+function buildEmojiPicker() {
+  document.getElementById('emojiPicker').innerHTML = EMOJIS.map(e =>
+    `<button class="emoji-btn ${e===selectedEmoji?'active':''}" onclick="pickEmoji('${e}')">${e}</button>`
+  ).join('');
+}
+
+function pickEmoji(e) {
+  selectedEmoji = e; avatarDataUrl = null;
+  document.getElementById('avatarPreview').style.display = 'none';
+  buildEmojiPicker();
+}
+
+function previewAvatar(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    avatarDataUrl = e.target.result;
+    const img = document.getElementById('avatarPreview');
+    img.src = avatarDataUrl; img.style.display = 'block';
+    document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active'));
+  };
+  reader.readAsDataURL(file);
+}
+
+async function createUser() {
+  const name  = document.getElementById('nuName').value.trim();
+  const email = document.getElementById('nuEmail').value.trim();
+  const pass  = document.getElementById('nuPass').value;
+  const errEl = document.getElementById('nuError');
+  const btn   = document.getElementById('nuBtn');
+  if (!name)  { errEl.textContent = 'Escribe un nombre'; return; }
+  if (!email) { errEl.textContent = 'Escribe tu correo'; return; }
+  if (!pass)  { errEl.textContent = 'Escribe una contraseña'; return; }
+  btn.textContent = '…'; btn.disabled = true;
+  try {
+    const cred = await auth.createUserWithEmailAndPassword(email, pass);
+    await cred.user.updateProfile({ displayName: name });
+    const profile = { id: cred.user.uid, name, emoji: avatarDataUrl ? null : selectedEmoji, avatar: avatarDataUrl || null, email };
+    const profiles = loadProfiles();
+    profiles.push(profile);
+    saveProfiles(profiles);
+    closeNewUserModal();
+    toast('Perfil creado ✓');
+    // onAuthStateChanged handles the transition
+  } catch(e) {
+    errEl.textContent = fbError(e.code);
+    btn.textContent = 'Crear'; btn.disabled = false;
+  }
+}
+
+async function logout() {
+  if (!confirm('¿Cerrar sesión?')) return;
+  await auth.signOut();
 }
 
 function fbError(code) {
@@ -694,59 +763,20 @@ function fbError(code) {
   return map[code] || 'Error. Intenta de nuevo';
 }
 
-async function doLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const pass  = document.getElementById('loginPassword').value;
-  const errEl = document.getElementById('loginError');
-  const btn   = document.getElementById('loginBtn');
-  if (!email || !pass) { errEl.textContent = 'Completa los campos'; return; }
-  btn.textContent = '…'; btn.disabled = true;
-  try {
-    await auth.signInWithEmailAndPassword(email, pass);
-  } catch(e) {
-    errEl.textContent = fbError(e.code);
-    btn.textContent = 'Entrar'; btn.disabled = false;
-  }
-}
-
-async function doRegister() {
-  const name  = document.getElementById('regName').value.trim();
-  const email = document.getElementById('regEmail').value.trim();
-  const pass  = document.getElementById('regPassword').value;
-  const errEl = document.getElementById('registerError');
-  const btn   = document.getElementById('registerBtn');
-  if (!name)  { errEl.textContent = 'Escribe tu nombre'; return; }
-  if (!email) { errEl.textContent = 'Escribe tu correo'; return; }
-  if (!pass)  { errEl.textContent = 'Escribe una contraseña'; return; }
-  btn.textContent = '…'; btn.disabled = true;
-  try {
-    const cred = await auth.createUserWithEmailAndPassword(email, pass);
-    await cred.user.updateProfile({ displayName: name });
-    // onAuthStateChanged handles the transition
-  } catch(e) {
-    errEl.textContent = fbError(e.code);
-    btn.textContent = 'Crear cuenta'; btn.disabled = false;
-  }
-}
-
-async function logout() {
-  if (!confirm('¿Cerrar sesión?')) return;
-  await auth.signOut();
-}
-
 /* ══════════════════════════════════════
-   PREFERENCES — localStorage (por dispositivo)
+   PREFERENCES & PHOTOS (localStorage)
 ══════════════════════════════════════ */
 const PREFS_KEY = 'diario_prefs_v3';
 function loadPrefs(uid)        { try { return JSON.parse(localStorage.getItem(PREFS_KEY+'_'+uid)||'{}'); } catch(e) { return {}; } }
 function savePrefsData(uid, o) { localStorage.setItem(PREFS_KEY+'_'+uid, JSON.stringify(o)); }
 
-/* ══════════════════════════════════════
-   FOTOS — localStorage (por dispositivo)
-══════════════════════════════════════ */
-function photosKey(uid, date)          { return 'diario_photos_v1_'+uid+'_'+date; }
-function loadPhotos(uid, date)         { try { return JSON.parse(localStorage.getItem(photosKey(uid,date))||'[]'); } catch(e) { return []; } }
-function savePhotosLocal(uid, date, p) { localStorage.setItem(photosKey(uid,date), JSON.stringify(p)); }
+function photosKey(uid,date)           { return 'diario_photos_v1_'+uid+'_'+date; }
+function loadPhotos(uid,date)          { try { return JSON.parse(localStorage.getItem(photosKey(uid,date))||'[]'); } catch(e) { return []; } }
+function savePhotosLocal(uid,date,arr) { localStorage.setItem(photosKey(uid,date), JSON.stringify(arr)); }
+
+function wallpaperKey(uid) { return 'diario_wallpaper_v1_'+uid; }
+function loadWallpaperData(uid) { try { return JSON.parse(localStorage.getItem(wallpaperKey(uid))||'null'); } catch(e) { return null; } }
+function saveWallpaperData(uid,d) { if(d) localStorage.setItem(wallpaperKey(uid),JSON.stringify(d)); else localStorage.removeItem(wallpaperKey(uid)); }
 
 /* ══════════════════════════════════════
    HELPERS
@@ -755,17 +785,13 @@ function todayISO() {
   const d = new Date();
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
-
 function fmtDate(iso) {
-  const [y,m,d] = iso.split('-');
-  const months = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
-  return d+' '+months[+m-1]+' '+y;
+  const [y,m,day] = iso.split('-');
+  return day+' '+['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'][+m-1]+' '+y;
 }
-
 function toast(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
+  el.textContent = msg; el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 2200);
 }
 
@@ -773,15 +799,21 @@ function toast(msg) {
    APP INIT
 ══════════════════════════════════════ */
 function initApp() {
-  const name    = currentUser.displayName || currentUser.email.split('@')[0];
+  const profile = getProfile(currentUser.uid) || { name: currentUser.displayName || currentUser.email.split('@')[0], emoji: '📖', avatar: null };
   const avatarEl = document.getElementById('currentUserAvatar');
-  avatarEl.textContent = name[0].toUpperCase();
-  document.getElementById('currentUserName').textContent = name;
+  if (profile.avatar) {
+    avatarEl.innerHTML = `<img src="${profile.avatar}" alt="${profile.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
+  } else {
+    avatarEl.textContent = profile.emoji || profile.name[0].toUpperCase();
+  }
+  document.getElementById('currentUserName').textContent = profile.name;
 
   const prefs = loadPrefs(currentUser.uid);
   if (prefs.color) applyColor(prefs.color);
   if (prefs.font)  applyFont(prefs.font);
-  if (prefs.size) { document.getElementById('sizeSlider').value = prefs.size; setFontSize(prefs.size); }
+  if (prefs.size)  { document.getElementById('sizeSlider').value = prefs.size; setFontSize(prefs.size); }
+
+  applyWallpaper(loadWallpaperData(currentUser.uid));
 
   document.getElementById('entryDate').value     = todayISO();
   document.getElementById('entryText').value     = '';
@@ -791,16 +823,55 @@ function initApp() {
 
   if (unsubscribeEntries) unsubscribeEntries();
   unsubscribeEntries = db.collection('users').doc(currentUser.uid)
-    .collection('entries')
-    .orderBy('date', 'desc')
-    .onSnapshot(snapshot => {
-      cachedEntries = snapshot.docs.map(d => d.data());
-      renderList();
-    });
+    .collection('entries').orderBy('date','desc')
+    .onSnapshot(snap => { cachedEntries = snap.docs.map(d => d.data()); renderList(); });
 }
 
 /* ══════════════════════════════════════
-   SAVE / LOAD
+   WALLPAPER
+══════════════════════════════════════ */
+function applyWallpaper(data) {
+  const body = document.body;
+  const preview = document.getElementById('wallpaperPreview');
+  const removeBtn = document.getElementById('removeWallpaperBtn');
+  if (data && data.src) {
+    body.style.backgroundImage   = `url(${data.src})`;
+    body.style.backgroundSize    = 'cover';
+    body.style.backgroundAttachment = 'fixed';
+    body.style.backgroundPosition   = 'center';
+    body.classList.add('has-wallpaper');
+    preview.style.backgroundImage = `url(${data.src})`;
+    preview.classList.add('visible');
+    if (removeBtn) removeBtn.style.display = '';
+  } else {
+    body.style.backgroundImage = '';
+    body.classList.remove('has-wallpaper');
+    preview.classList.remove('visible');
+    if (removeBtn) removeBtn.style.display = 'none';
+  }
+}
+
+function setWallpaperFromFile(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const data = { src: e.target.result };
+    saveWallpaperData(currentUser.uid, data);
+    applyWallpaper(data);
+    toast('Fondo actualizado ✓');
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+
+function removeWallpaper() {
+  saveWallpaperData(currentUser.uid, null);
+  applyWallpaper(null);
+  toast('Fondo eliminado');
+}
+
+/* ══════════════════════════════════════
+   SAVE / LOAD ENTRIES
 ══════════════════════════════════════ */
 const dot = document.getElementById('saveDot');
 function setDirty() { dot.classList.remove('saved'); dot.classList.add('dirty'); }
@@ -808,8 +879,7 @@ function setSaved() { dot.classList.remove('dirty'); dot.classList.add('saved');
 
 function collectPhotos() {
   return Array.from(document.querySelectorAll('.photo-block')).map(b => ({
-    src:     b.querySelector('img').src,
-    caption: b.querySelector('.photo-caption').value,
+    src: b.querySelector('img').src, caption: b.querySelector('.photo-caption').value,
   }));
 }
 
@@ -819,18 +889,12 @@ async function saveEntry() {
   const location = document.getElementById('entryLocation').value.trim();
   const photos   = collectPhotos();
   if (!text && !photos.length) { toast('Escribe algo o añade una foto'); return; }
-
   savePhotosLocal(currentUser.uid, date, photos);
-
   try {
-    await db.collection('users').doc(currentUser.uid)
-      .collection('entries').doc(date)
+    await db.collection('users').doc(currentUser.uid).collection('entries').doc(date)
       .set({ date, text, location, updated: firebase.firestore.FieldValue.serverTimestamp() });
-    setSaved();
-    toast('Guardado ✓');
-  } catch(e) {
-    toast('Error al guardar');
-  }
+    setSaved(); toast('Guardado ✓');
+  } catch(e) { toast('Error al guardar'); }
 }
 
 function newEntry() {
@@ -838,23 +902,20 @@ function newEntry() {
   document.getElementById('entryText').value     = '';
   document.getElementById('entryLocation').value = '';
   document.getElementById('photoBlocks').innerHTML = '';
-  updateCount();
-  dot.classList.remove('dirty','saved');
+  updateCount(); dot.classList.remove('dirty','saved');
   document.getElementById('entryText').focus();
 }
 
 function loadEntry(date) {
-  const e = cachedEntries.find(e => e.date === date);
-  if (!e) return;
+  const e = cachedEntries.find(e => e.date === date); if (!e) return;
   document.getElementById('entryDate').value     = e.date;
   document.getElementById('entryText').value     = e.text || '';
   document.getElementById('entryLocation').value = e.location || '';
   const container = document.getElementById('photoBlocks');
   container.innerHTML = '';
   loadPhotos(currentUser.uid, date).forEach(p => appendPhotoBlock(p.src, p.caption));
-  updateCount();
-  dot.classList.remove('dirty','saved');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  updateCount(); dot.classList.remove('dirty','saved');
+  window.scrollTo({ top:0, behavior:'smooth' });
 }
 
 async function deleteEntry(date) {
@@ -864,28 +925,22 @@ async function deleteEntry(date) {
     localStorage.removeItem(photosKey(currentUser.uid, date));
     if (document.getElementById('entryDate').value === date) newEntry();
     toast('Entrada eliminada');
-  } catch(e) {
-    toast('Error al eliminar');
-  }
+  } catch(e) { toast('Error al eliminar'); }
 }
 
 function renderList() {
   const el = document.getElementById('entriesList');
-  if (!cachedEntries.length) {
-    el.innerHTML = '<p class="empty-state">Aún no hay entradas guardadas.</p>';
-    return;
-  }
+  if (!cachedEntries.length) { el.innerHTML = '<p class="empty-state">Aún no hay entradas guardadas.</p>'; return; }
   el.innerHTML = cachedEntries.map(e => {
-    const photos      = loadPhotos(currentUser.uid, e.date);
-    const preview     = e.text ? e.text.substring(0,80) : (photos.length ? `[${photos.length} foto${photos.length>1?'s':''}]` : '');
-    const locationHtml = e.location ? `<span class="entry-row-location">📍 ${e.location.replace(/</g,'&lt;')}</span>` : '';
+    const photos   = loadPhotos(currentUser.uid, e.date);
+    const preview  = e.text ? e.text.substring(0,80) : (photos.length ? `[${photos.length} foto${photos.length>1?'s':''}]` : '');
+    const locHtml  = e.location ? `<span class="entry-row-location">📍 ${e.location.replace(/</g,'&lt;')}</span>` : '';
     return `
       <div class="entry-row" onclick="loadEntry('${e.date}')">
         <span class="entry-row-date">${fmtDate(e.date)}</span>
-        <span class="entry-row-preview">${preview.replace(/</g,'&lt;')}${locationHtml ? ' · ' : ''}${locationHtml}</span>
+        <span class="entry-row-preview">${preview.replace(/</g,'&lt;')}${locHtml?' · ':''}${locHtml}</span>
         <button class="entry-row-del" onclick="event.stopPropagation();deleteEntry('${e.date}')" aria-label="Eliminar">✕</button>
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
 
@@ -895,12 +950,11 @@ function renderList() {
 function addPhotos(input) {
   Array.from(input.files).forEach(file => {
     const reader = new FileReader();
-    reader.onload = e => { appendPhotoBlock(e.target.result, ''); setDirty(); };
+    reader.onload = e => { appendPhotoBlock(e.target.result,''); setDirty(); };
     reader.readAsDataURL(file);
   });
   input.value = '';
 }
-
 function appendPhotoBlock(src, caption) {
   const container = document.getElementById('photoBlocks');
   const block = document.createElement('div');
@@ -908,126 +962,115 @@ function appendPhotoBlock(src, caption) {
   block.innerHTML = `
     <button class="photo-block-del" onclick="this.parentElement.remove();setDirty();" title="Eliminar foto">✕</button>
     <img src="${src}" alt="foto" />
-    <textarea class="photo-caption" placeholder="Escribe algo sobre esta foto…" rows="2" oninput="setDirty()">${caption}</textarea>
-  `;
+    <textarea class="photo-caption" placeholder="Escribe algo sobre esta foto…" rows="2" oninput="setDirty()">${caption}</textarea>`;
   container.appendChild(block);
 }
 
 /* ══════════════════════════════════════
    EXPORT
 ══════════════════════════════════════ */
-function updateCount() {
-  document.getElementById('charCount').textContent = document.getElementById('entryText').value.length;
-}
-
+function updateCount() { document.getElementById('charCount').textContent = document.getElementById('entryText').value.length; }
 document.getElementById('entryText').addEventListener('input', () => { updateCount(); setDirty(); });
 
 function downloadEntry() {
-  const date     = document.getElementById('entryDate').value;
-  const text     = document.getElementById('entryText').value.trim();
-  const location = document.getElementById('entryLocation').value.trim();
+  const date = document.getElementById('entryDate').value;
+  const text = document.getElementById('entryText').value.trim();
+  const loc  = document.getElementById('entryLocation').value.trim();
   if (!text) { toast('Nada para descargar'); return; }
-  const header = fmtDate(date) + (location ? '  ·  ' + location : '');
-  dl(header + '\n' + '─'.repeat(36) + '\n\n' + text, 'diario-' + date + '.txt');
+  dl(fmtDate(date)+(loc?'  ·  '+loc:'')+'\n'+'─'.repeat(36)+'\n\n'+text, 'diario-'+date+'.txt');
 }
 
 function exportAll() {
   if (!cachedEntries.length) { toast('No hay entradas aún'); return; }
-  const content = [...cachedEntries].sort((a,b) => a.date.localeCompare(b.date)).map(e => {
-    const header = fmtDate(e.date) + (e.location ? '  ·  ' + e.location : '');
+  const content = [...cachedEntries].sort((a,b)=>a.date.localeCompare(b.date)).map(e => {
     const photos = loadPhotos(currentUser.uid, e.date);
-    return header + '\n' + '─'.repeat(36) + '\n\n' + (e.text || '') +
-      (photos.length ? '\n\n[' + photos.length + ' foto(s) en esta entrada]' : '');
+    return fmtDate(e.date)+(e.location?'  ·  '+e.location:'')+'\n'+'─'.repeat(36)+'\n\n'+(e.text||'')+
+      (photos.length?'\n\n['+photos.length+' foto(s) en esta entrada]':'');
   }).join('\n\n\n');
-  dl(content, 'mi-diario.txt');
-  toast('Diario exportado');
+  dl(content,'mi-diario.txt'); toast('Diario exportado');
 }
 
 function dl(text, name) {
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }));
-  a.download = name;
-  a.click();
+  a.href = URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));
+  a.download = name; a.click();
 }
 
 /* ══════════════════════════════════════
    SETTINGS
 ══════════════════════════════════════ */
 const FONTS = [
-  { key: 'lora',     label: 'Lora',     css: "'Lora', Georgia, serif",             sample: 'Hoy pensé…' },
-  { key: 'playfair', label: 'Playfair', css: "'Playfair Display', Georgia, serif", sample: 'Hoy pensé…' },
-  { key: 'crimson',  label: 'Crimson',  css: "'Crimson Pro', Georgia, serif",      sample: 'Hoy pensé…' },
-  { key: 'fraunces', label: 'Fraunces', css: "'Fraunces', Georgia, serif",         sample: 'Hoy pensé…' },
-  { key: 'mono',     label: 'Mono',     css: "'DM Mono', monospace",               sample: 'Hoy pensé…' },
-  { key: 'sans',     label: 'Sans',     css: "'Space Grotesk', sans-serif",        sample: 'Hoy pensé…' },
+  { key:'lora',     label:'Lora',     css:"'Lora', Georgia, serif",             sample:'Hoy pensé…' },
+  { key:'playfair', label:'Playfair', css:"'Playfair Display', Georgia, serif", sample:'Hoy pensé…' },
+  { key:'crimson',  label:'Crimson',  css:"'Crimson Pro', Georgia, serif",      sample:'Hoy pensé…' },
+  { key:'fraunces', label:'Fraunces', css:"'Fraunces', Georgia, serif",         sample:'Hoy pensé…' },
+  { key:'mono',     label:'Mono',     css:"'DM Mono', monospace",               sample:'Hoy pensé…' },
+  { key:'sans',     label:'Sans',     css:"'Space Grotesk', sans-serif",        sample:'Hoy pensé…' },
 ];
 
 const COLORS = [
-  { key: 'cream',  bg:'#f5f0e8', bg2:'#ede8de', ink:'#1a1714', ink2:'#6b6460', ink3:'#a09890' },
-  { key: 'chalk',  bg:'#f8f7f4', bg2:'#eeede8', ink:'#1c1c1c', ink2:'#666',    ink3:'#aaa'    },
-  { key: 'dusk',   bg:'#1e1c2a', bg2:'#16151f', ink:'#e8e6f0', ink2:'#9d9ab0', ink3:'#5c5a70' },
-  { key: 'forest', bg:'#f0f4ef', bg2:'#e4eae3', ink:'#1a2318', ink2:'#4a5e46', ink3:'#8aa085' },
-  { key: 'rose',   bg:'#faf3f3', bg2:'#f2e8e8', ink:'#271818', ink2:'#7a4f4f', ink3:'#b08888' },
-  { key: 'slate',  bg:'#f0f2f5', bg2:'#e4e8ee', ink:'#151b26', ink2:'#4e5a6e', ink3:'#8a96a8' },
-  { key: 'sand',   bg:'#faf6ec', bg2:'#f0ead8', ink:'#2a200c', ink2:'#6e5a38', ink3:'#a8956a' },
-  { key: 'night',  bg:'#0f0f13', bg2:'#0a0a0d', ink:'#e8e8ec', ink2:'#8888a0', ink3:'#4a4a60' },
-  { key: 'blush',  bg:'#fdf4f8', bg2:'#f5e8f0', ink:'#1f1020', ink2:'#6b4a6e', ink3:'#a888ac' },
-  { key: 'mint',   bg:'#f0faf6', bg2:'#e0f2ea', ink:'#0d2018', ink2:'#3a6050', ink3:'#80a898' },
+  { key:'cream',  bg:'#f5f0e8', bg2:'#ede8de', ink:'#1a1714', ink2:'#6b6460', ink3:'#a09890' },
+  { key:'chalk',  bg:'#f8f7f4', bg2:'#eeede8', ink:'#1c1c1c', ink2:'#666',    ink3:'#aaa'    },
+  { key:'dusk',   bg:'#1e1c2a', bg2:'#16151f', ink:'#e8e6f0', ink2:'#9d9ab0', ink3:'#5c5a70' },
+  { key:'forest', bg:'#f0f4ef', bg2:'#e4eae3', ink:'#1a2318', ink2:'#4a5e46', ink3:'#8aa085' },
+  { key:'rose',   bg:'#faf3f3', bg2:'#f2e8e8', ink:'#271818', ink2:'#7a4f4f', ink3:'#b08888' },
+  { key:'slate',  bg:'#f0f2f5', bg2:'#e4e8ee', ink:'#151b26', ink2:'#4e5a6e', ink3:'#8a96a8' },
+  { key:'sand',   bg:'#faf6ec', bg2:'#f0ead8', ink:'#2a200c', ink2:'#6e5a38', ink3:'#a8956a' },
+  { key:'night',  bg:'#0f0f13', bg2:'#0a0a0d', ink:'#e8e8ec', ink2:'#8888a0', ink3:'#4a4a60' },
+  { key:'blush',  bg:'#fdf4f8', bg2:'#f5e8f0', ink:'#1f1020', ink2:'#6b4a6e', ink3:'#a888ac' },
+  { key:'mint',   bg:'#f0faf6', bg2:'#e0f2ea', ink:'#0d2018', ink2:'#3a6050', ink3:'#80a898' },
 ];
 
 function applyColor(key) {
-  const c = COLORS.find(x => x.key === key);
-  if (!c) return;
+  const c = COLORS.find(x=>x.key===key); if (!c) return;
   const r = document.documentElement.style;
-  r.setProperty('--bg',   c.bg);
-  r.setProperty('--bg2',  c.bg2);
-  r.setProperty('--ink',  c.ink);
-  r.setProperty('--ink2', c.ink2);
+  r.setProperty('--bg',   c.bg);  r.setProperty('--bg2',  c.bg2);
+  r.setProperty('--ink',  c.ink); r.setProperty('--ink2', c.ink2);
   r.setProperty('--ink3', c.ink3);
-  r.setProperty('--cal-filter', parseInt(c.bg.slice(1,3),16) < 100 ? 'invert(1)' : 'none');
+  r.setProperty('--cal-filter', parseInt(c.bg.slice(1,3),16)<100?'invert(1)':'none');
+  // Also update loginScreen background
+  document.getElementById('loginScreen').style.background = c.bg;
   currentColorKey = key;
-  document.querySelectorAll('.color-swatch').forEach(el => el.classList.toggle('active', el.dataset.key === key));
-  if (currentUser) savePrefsData(currentUser.uid, { ...loadPrefs(currentUser.uid), color: key });
+  document.querySelectorAll('.color-swatch').forEach(el=>el.classList.toggle('active',el.dataset.key===key));
+  if (currentUser) savePrefsData(currentUser.uid,{...loadPrefs(currentUser.uid),color:key});
 }
 
 function applyFont(key) {
-  const f = FONTS.find(x => x.key === key);
-  if (!f) return;
-  document.documentElement.style.setProperty('--font-body', f.css);
+  const f = FONTS.find(x=>x.key===key); if (!f) return;
+  document.documentElement.style.setProperty('--font-body',f.css);
   document.querySelector('.entry-area').style.fontFamily = f.css;
   currentFontKey = key;
-  document.querySelectorAll('.font-option').forEach(el => el.classList.toggle('active', el.dataset.key === key));
-  if (currentUser) savePrefsData(currentUser.uid, { ...loadPrefs(currentUser.uid), font: key });
+  document.querySelectorAll('.font-option').forEach(el=>el.classList.toggle('active',el.dataset.key===key));
+  if (currentUser) savePrefsData(currentUser.uid,{...loadPrefs(currentUser.uid),font:key});
 }
 
 function setFontSize(val) {
-  document.querySelector('.entry-area').style.fontSize = val + 'px';
+  document.querySelector('.entry-area').style.fontSize = val+'px';
   document.getElementById('sizeLabel').textContent = val;
   currentSize = +val;
-  if (currentUser) savePrefsData(currentUser.uid, { ...loadPrefs(currentUser.uid), size: +val });
+  if (currentUser) savePrefsData(currentUser.uid,{...loadPrefs(currentUser.uid),size:+val});
 }
 
 function buildSettings() {
-  document.getElementById('fontGrid').innerHTML = FONTS.map(f => `
-    <button class="font-option ${f.key === currentFontKey ? 'active' : ''}" data-key="${f.key}" onclick="applyFont('${f.key}')">
+  document.getElementById('fontGrid').innerHTML = FONTS.map(f=>`
+    <button class="font-option ${f.key===currentFontKey?'active':''}" data-key="${f.key}" onclick="applyFont('${f.key}')">
       <span class="font-option-name">${f.label}</span>
       <span class="font-option-sample" style="font-family:${f.css}">${f.sample}</span>
-    </button>
-  `).join('');
-
-  document.getElementById('colorGrid').innerHTML = COLORS.map(c => `
-    <button class="color-swatch ${c.key === currentColorKey ? 'active' : ''}"
-      data-key="${c.key}"
-      style="background:${c.bg}; border: 2px solid ${c.ink2};"
-      onclick="applyColor('${c.key}')"
-      title="${c.key}"
-      aria-label="Color ${c.key}"></button>
-  `).join('');
+    </button>`).join('');
+  document.getElementById('colorGrid').innerHTML = COLORS.map(c=>`
+    <button class="color-swatch ${c.key===currentColorKey?'active':''}" data-key="${c.key}"
+      style="background:${c.bg}; border:2px solid ${c.ink2};"
+      onclick="applyColor('${c.key}')" title="${c.key}" aria-label="Color ${c.key}"></button>`).join('');
 }
 
-function openSettings()              { buildSettings(); document.getElementById('settingsBackdrop').classList.add('open'); }
-function closeSettings()             { document.getElementById('settingsBackdrop').classList.remove('open'); }
-function closeSettingsIfBackdrop(e)  { if (e.target === document.getElementById('settingsBackdrop')) closeSettings(); }
+function openSettings()             { buildSettings(); document.getElementById('settingsBackdrop').classList.add('open'); }
+function closeSettings()            { document.getElementById('settingsBackdrop').classList.remove('open'); }
+function closeSettingsIfBackdrop(e) { if(e.target===document.getElementById('settingsBackdrop')) closeSettings(); }
+
+/* ══════════════════════════════════════
+   BOOT
+══════════════════════════════════════ */
+renderLoginScreen();
 </script>
 </body>
 </html>
