@@ -965,16 +965,26 @@ async function saveEntry() {
   const date     = document.getElementById('entryDate').value;
   const text     = document.getElementById('entryText').value.trim();
   const location = document.getElementById('entryLocation').value.trim();
-  const nPhotos  = document.querySelectorAll('.photo-block').length;
-  if (!text && !nPhotos) { toast('Escribe algo o añade una foto'); return; }
+  const blocks   = Array.from(document.querySelectorAll('.photo-block'));
+  if (!text && !blocks.length) { toast('Escribe algo o añade una foto'); return; }
   toast('Guardando…');
   try {
-    const photoRefs = await savePhotosToFirestore(date);
+    const photos = [];
+    for (const block of blocks) {
+      const img     = block.querySelector('img');
+      const caption = block.querySelector('.photo-caption').value;
+      let src = img.src;
+      if (src.startsWith('data:')) src = await compressImage(src);
+      photos.push({ src, caption });
+    }
     await db.collection('users').doc(currentUser.uid).collection('entries').doc(date)
-      .set({ date, text, location, photoRefs, updated: firebase.firestore.FieldValue.serverTimestamp() });
+      .set({ date, text, location, photos, updated: firebase.firestore.FieldValue.serverTimestamp() });
     setSaved(); toast('Guardado ✓');
     newEntry();
-  } catch(e) { console.error(e); toast('Error al guardar'); }
+  } catch(e) {
+    console.error(e);
+    toast('Error: ' + (e.code || e.message || 'al guardar'));
+  }
 }
 
 function confirmClear() {
@@ -1002,11 +1012,11 @@ async function loadEntry(date) {
   document.getElementById('entryLocation').value = e.location || '';
   const container = document.getElementById('photoBlocks');
   container.innerHTML = '';
-  if (e.photoRefs && e.photoRefs.length) {
-    const photos = await loadPhotosFromFirestore(e.photoRefs);
-    photos.forEach(p => appendPhotoBlock(p.src, p.caption, p.id));
-  } else if (e.photos && e.photos.length) {
+  if (e.photos && e.photos.length) {
     e.photos.forEach(p => appendPhotoBlock(p.src, p.caption));
+  } else if (e.photoRefs && e.photoRefs.length) {
+    const photos = await loadPhotosFromFirestore(e.photoRefs);
+    photos.forEach(p => appendPhotoBlock(p.src, p.caption));
   } else {
     loadPhotos(currentUser.uid, date).forEach(p => appendPhotoBlock(p.src, p.caption));
   }
@@ -1017,14 +1027,6 @@ async function loadEntry(date) {
 async function deleteEntry(date) {
   if (!confirm('¿Eliminar esta entrada?')) return;
   try {
-    const e = cachedEntries.find(e => e.date === date);
-    if (e && e.photoRefs && e.photoRefs.length) {
-      const batch = db.batch();
-      e.photoRefs.forEach(r => batch.delete(
-        db.collection('users').doc(currentUser.uid).collection('photos').doc(r.id)
-      ));
-      await batch.commit();
-    }
     await db.collection('users').doc(currentUser.uid).collection('entries').doc(date).delete();
     localStorage.removeItem(photosKey(currentUser.uid, date));
     if (document.getElementById('entryDate').value === date) newEntry();
