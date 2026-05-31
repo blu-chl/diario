@@ -451,7 +451,6 @@
         oninput="setDirty()" autocomplete="off" />
     </div>
     <hr class="divider" />
-    <div class="photo-blocks" id="photoBlocks"></div>
     <textarea class="entry-area" id="entryText" placeholder="¿Qué pasó hoy?" spellcheck="true"></textarea>
 
     <div class="toolbar">
@@ -459,10 +458,6 @@
         <button class="btn btn-primary" onclick="saveEntry()">Guardar</button>
         <button class="btn" onclick="newEntry()">Nueva entrada</button>
         <button class="btn" onclick="confirmClear()" title="Borrar todo lo escrito">↺ Limpiar</button>
-        <label class="btn" style="cursor:pointer;" title="Añadir foto">
-          📷 Foto
-          <input type="file" accept="image/*" style="display:none" multiple onchange="addPhotos(this)" />
-        </label>
       </div>
       <div class="toolbar-right">
         <button class="btn" onclick="printEntry()">↓ PDF</button>
@@ -965,26 +960,13 @@ async function saveEntry() {
   const date     = document.getElementById('entryDate').value;
   const text     = document.getElementById('entryText').value.trim();
   const location = document.getElementById('entryLocation').value.trim();
-  const blocks   = Array.from(document.querySelectorAll('.photo-block'));
-  if (!text && !blocks.length) { toast('Escribe algo o añade una foto'); return; }
-  toast('Guardando…');
+  if (!text) { toast('Escribe algo primero'); return; }
   try {
-    const photos = [];
-    for (const block of blocks) {
-      const img     = block.querySelector('img');
-      const caption = block.querySelector('.photo-caption').value;
-      let src = img.src;
-      if (src.startsWith('data:')) src = await compressImage(src);
-      photos.push({ src, caption });
-    }
     await db.collection('users').doc(currentUser.uid).collection('entries').doc(date)
-      .set({ date, text, location, photos, updated: firebase.firestore.FieldValue.serverTimestamp() });
+      .set({ date, text, location, updated: firebase.firestore.FieldValue.serverTimestamp() });
     setSaved(); toast('Guardado ✓');
     newEntry();
-  } catch(e) {
-    console.error(e);
-    toast('Error: ' + (e.code || e.message || 'al guardar'));
-  }
+  } catch(e) { toast('Error al guardar'); }
 }
 
 function confirmClear() {
@@ -1000,26 +982,15 @@ function newEntry() {
   document.getElementById('entryDate').value     = todayISO();
   document.getElementById('entryText').value     = '';
   document.getElementById('entryLocation').value = '';
-  document.getElementById('photoBlocks').innerHTML = '';
   updateCount(); dot.classList.remove('dirty','saved');
   document.getElementById('entryText').focus();
 }
 
-async function loadEntry(date) {
+function loadEntry(date) {
   const e = cachedEntries.find(e => e.date === date); if (!e) return;
   document.getElementById('entryDate').value     = e.date;
   document.getElementById('entryText').value     = e.text || '';
   document.getElementById('entryLocation').value = e.location || '';
-  const container = document.getElementById('photoBlocks');
-  container.innerHTML = '';
-  if (e.photos && e.photos.length) {
-    e.photos.forEach(p => appendPhotoBlock(p.src, p.caption));
-  } else if (e.photoRefs && e.photoRefs.length) {
-    const photos = await loadPhotosFromFirestore(e.photoRefs);
-    photos.forEach(p => appendPhotoBlock(p.src, p.caption));
-  } else {
-    loadPhotos(currentUser.uid, date).forEach(p => appendPhotoBlock(p.src, p.caption));
-  }
   updateCount(); dot.classList.remove('dirty','saved');
   window.scrollTo({ top:0, behavior:'smooth' });
 }
@@ -1038,8 +1009,7 @@ function renderList() {
   const el = document.getElementById('entriesList');
   if (!cachedEntries.length) { el.innerHTML = '<p class="empty-state">Aún no hay entradas guardadas.</p>'; return; }
   el.innerHTML = cachedEntries.map(e => {
-    const nf      = (e.photoRefs&&e.photoRefs.length) || loadPhotos(currentUser.uid, e.date).length;
-    const preview = e.text ? e.text.substring(0,80) : (nf ? `[${nf} foto${nf>1?'s':''}]` : '');
+    const preview = e.text ? e.text.substring(0,80) : '';
     const locHtml  = e.location ? `<span class="entry-row-location">📍 ${e.location.replace(/</g,'&lt;')}</span>` : '';
     return `
       <div class="entry-row" onclick="loadEntry('${e.date}')">
@@ -1051,7 +1021,7 @@ function renderList() {
 }
 
 /* ══════════════════════════════════════
-   FOTOS — compresión + Firestore
+   EXPORT (fotos removidas — solo texto)
 ══════════════════════════════════════ */
 function compressImage(dataUrl) {
   return new Promise((resolve, reject) => {
@@ -1111,27 +1081,6 @@ async function loadPhotosFromFirestore(photoRefs) {
   return docs.filter(d => d.exists).map(d => ({ id: d.id, ...d.data() }));
 }
 
-function addPhotos(input) {
-  Array.from(input.files).forEach(file => {
-    const reader = new FileReader();
-    reader.onload = e => { appendPhotoBlock(e.target.result, ''); setDirty(); };
-    reader.readAsDataURL(file);
-  });
-  input.value = '';
-}
-
-function appendPhotoBlock(src, caption, photoId) {
-  const container = document.getElementById('photoBlocks');
-  const block = document.createElement('div');
-  block.className = 'photo-block';
-  if (photoId) block.dataset.photoId = photoId;
-  block.innerHTML = `
-    <button class="photo-block-del" onclick="this.parentElement.remove();setDirty();" title="Eliminar foto">✕</button>
-    <img src="${src}" alt="foto" />
-    <textarea class="photo-caption" placeholder="Escribe algo sobre esta foto…" rows="2" oninput="setDirty()">${caption}</textarea>`;
-  container.appendChild(block);
-}
-
 /* ══════════════════════════════════════
    EXPORT
 ══════════════════════════════════════ */
@@ -1139,9 +1088,7 @@ function updateCount() { document.getElementById('charCount').textContent = docu
 document.getElementById('entryText').addEventListener('input', () => { updateCount(); setDirty(); });
 
 function printEntry() {
-  const text   = document.getElementById('entryText').value.trim();
-  const photos = document.querySelectorAll('.photo-block').length;
-  if (!text && !photos) { toast('Nada para imprimir'); return; }
+  if (!document.getElementById('entryText').value.trim()) { toast('Nada para imprimir'); return; }
   window.print();
 }
 
@@ -1155,11 +1102,9 @@ function downloadEntry() {
 
 function exportAll() {
   if (!cachedEntries.length) { toast('No hay entradas aún'); return; }
-  const content = [...cachedEntries].sort((a,b)=>a.date.localeCompare(b.date)).map(e => {
-    const photos = loadPhotos(currentUser.uid, e.date);
-    return fmtDate(e.date)+(e.location?'  ·  '+e.location:'')+'\n'+'─'.repeat(36)+'\n\n'+(e.text||'')+
-      (photos.length?'\n\n['+photos.length+' foto(s) en esta entrada]':'');
-  }).join('\n\n\n');
+  const content = [...cachedEntries].sort((a,b)=>a.date.localeCompare(b.date)).map(e =>
+    fmtDate(e.date)+(e.location?'  ·  '+e.location:'')+'\n'+'─'.repeat(36)+'\n\n'+(e.text||'')
+  ).join('\n\n\n');
   dl(content,'mi-diario.txt'); toast('Diario exportado');
 }
 
