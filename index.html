@@ -324,6 +324,15 @@
       .font-grid { grid-template-columns: 1fr; }
       .users-grid { gap: 1rem; }
     }
+
+    @media print {
+      #loginScreen, .top-bar, .toolbar, .entries-section,
+      .settings-backdrop, .toast { display: none !important; }
+      body { background: white !important; background-image: none !important; }
+      .page { max-width: 100% !important; padding: 2cm !important; box-shadow: none !important; margin: 0 !important; }
+      .photo-block { break-inside: avoid; border: none !important; }
+      .photo-caption { border: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -456,6 +465,7 @@
         </label>
       </div>
       <div class="toolbar-right">
+        <button class="btn" onclick="printEntry()">↓ PDF</button>
         <button class="btn" onclick="downloadEntry()">↓ .txt</button>
         <button class="btn" onclick="exportAll()">Exportar todo</button>
       </div>
@@ -947,15 +957,16 @@ async function saveEntry() {
   const date     = document.getElementById('entryDate').value;
   const text     = document.getElementById('entryText').value.trim();
   const location = document.getElementById('entryLocation').value.trim();
-  const photos   = collectPhotos();
-  if (!text && !photos.length) { toast('Escribe algo o añade una foto'); return; }
-  savePhotosLocal(currentUser.uid, date, photos);
+  const nPhotos  = document.querySelectorAll('.photo-block').length;
+  if (!text && !nPhotos) { toast('Escribe algo o añade una foto'); return; }
+  toast('Guardando…');
   try {
+    const photoRefs = await savePhotosToFirestore(date);
     await db.collection('users').doc(currentUser.uid).collection('entries').doc(date)
-      .set({ date, text, location, updated: firebase.firestore.FieldValue.serverTimestamp() });
+      .set({ date, text, location, photoRefs, updated: firebase.firestore.FieldValue.serverTimestamp() });
     setSaved(); toast('Guardado ✓');
     newEntry();
-  } catch(e) { toast('Error al guardar'); }
+  } catch(e) { console.error(e); toast('Error al guardar'); }
 }
 
 function confirmClear() {
@@ -976,14 +987,21 @@ function newEntry() {
   document.getElementById('entryText').focus();
 }
 
-function loadEntry(date) {
+async function loadEntry(date) {
   const e = cachedEntries.find(e => e.date === date); if (!e) return;
   document.getElementById('entryDate').value     = e.date;
   document.getElementById('entryText').value     = e.text || '';
   document.getElementById('entryLocation').value = e.location || '';
   const container = document.getElementById('photoBlocks');
   container.innerHTML = '';
-  loadPhotos(currentUser.uid, date).forEach(p => appendPhotoBlock(p.src, p.caption));
+  if (e.photoRefs && e.photoRefs.length) {
+    const photos = await loadPhotosFromFirestore(e.photoRefs);
+    photos.forEach(p => appendPhotoBlock(p.src, p.caption, p.id));
+  } else if (e.photos && e.photos.length) {
+    e.photos.forEach(p => appendPhotoBlock(p.src, p.caption));
+  } else {
+    loadPhotos(currentUser.uid, date).forEach(p => appendPhotoBlock(p.src, p.caption));
+  }
   updateCount(); dot.classList.remove('dirty','saved');
   window.scrollTo({ top:0, behavior:'smooth' });
 }
@@ -991,6 +1009,14 @@ function loadEntry(date) {
 async function deleteEntry(date) {
   if (!confirm('¿Eliminar esta entrada?')) return;
   try {
+    const e = cachedEntries.find(e => e.date === date);
+    if (e && e.photoRefs && e.photoRefs.length) {
+      const batch = db.batch();
+      e.photoRefs.forEach(r => batch.delete(
+        db.collection('users').doc(currentUser.uid).collection('photos').doc(r.id)
+      ));
+      await batch.commit();
+    }
     await db.collection('users').doc(currentUser.uid).collection('entries').doc(date).delete();
     localStorage.removeItem(photosKey(currentUser.uid, date));
     if (document.getElementById('entryDate').value === date) newEntry();
@@ -1002,8 +1028,8 @@ function renderList() {
   const el = document.getElementById('entriesList');
   if (!cachedEntries.length) { el.innerHTML = '<p class="empty-state">Aún no hay entradas guardadas.</p>'; return; }
   el.innerHTML = cachedEntries.map(e => {
-    const photos   = loadPhotos(currentUser.uid, e.date);
-    const preview  = e.text ? e.text.substring(0,80) : (photos.length ? `[${photos.length} foto${photos.length>1?'s':''}]` : '');
+    const nf      = (e.photoRefs&&e.photoRefs.length) || loadPhotos(currentUser.uid, e.date).length;
+    const preview = e.text ? e.text.substring(0,80) : (nf ? `[${nf} foto${nf>1?'s':''}]` : '');
     const locHtml  = e.location ? `<span class="entry-row-location">📍 ${e.location.replace(/</g,'&lt;')}</span>` : '';
     return `
       <div class="entry-row" onclick="loadEntry('${e.date}')">
@@ -1015,20 +1041,71 @@ function renderList() {
 }
 
 /* ══════════════════════════════════════
-   PHOTOS
+   FOTOS — compresión + Firestore
 ══════════════════════════════════════ */
+function compressImage(dataUrl) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 1200;
+      let { width, height } = img;
+      if (width > MAX || height > MAX) {
+        const r = Math.min(MAX/width, MAX/height);
+        width = Math.round(width*r); height = Math.round(height*r);
+      }
+      const c = document.createElement('canvas');
+      c.width = width; c.height = height;
+      c.getContext('2d').drawImage(img, 0, 0, width, height);
+      resolve(c.toDataURL('image/jpeg', 0.72));
+    };
+    img.src = dataUrl;
+  });
+}
+
+async function savePhotosToFirestore(date) {
+  const blocks = document.querySelectorAll('.photo-block');
+  const refs = [];
+  for (let i = 0; i < blocks.length; i++) {
+    const img     = blocks[i].querySelector('img');
+    const caption = blocks[i].querySelector('.photo-caption').value;
+    const pid     = blocks[i].dataset.photoId;
+    if (pid) {
+      await db.collection('users').doc(currentUser.uid).collection('photos').doc(pid).update({ caption });
+      refs.push({ id: pid, caption });
+    } else {
+      const compressed = await compressImage(img.src);
+      const docRef = await db.collection('users').doc(currentUser.uid)
+        .collection('photos').add({ src: compressed, caption, entryDate: date });
+      img.src = compressed;
+      blocks[i].dataset.photoId = docRef.id;
+      refs.push({ id: docRef.id, caption });
+    }
+  }
+  return refs;
+}
+
+async function loadPhotosFromFirestore(photoRefs) {
+  if (!photoRefs || !photoRefs.length) return [];
+  const docs = await Promise.all(
+    photoRefs.map(r => db.collection('users').doc(currentUser.uid).collection('photos').doc(r.id).get())
+  );
+  return docs.filter(d => d.exists).map(d => ({ id: d.id, ...d.data() }));
+}
+
 function addPhotos(input) {
   Array.from(input.files).forEach(file => {
     const reader = new FileReader();
-    reader.onload = e => { appendPhotoBlock(e.target.result,''); setDirty(); };
+    reader.onload = e => { appendPhotoBlock(e.target.result, ''); setDirty(); };
     reader.readAsDataURL(file);
   });
   input.value = '';
 }
-function appendPhotoBlock(src, caption) {
+
+function appendPhotoBlock(src, caption, photoId) {
   const container = document.getElementById('photoBlocks');
   const block = document.createElement('div');
   block.className = 'photo-block';
+  if (photoId) block.dataset.photoId = photoId;
   block.innerHTML = `
     <button class="photo-block-del" onclick="this.parentElement.remove();setDirty();" title="Eliminar foto">✕</button>
     <img src="${src}" alt="foto" />
@@ -1041,6 +1118,13 @@ function appendPhotoBlock(src, caption) {
 ══════════════════════════════════════ */
 function updateCount() { document.getElementById('charCount').textContent = document.getElementById('entryText').value.length; }
 document.getElementById('entryText').addEventListener('input', () => { updateCount(); setDirty(); });
+
+function printEntry() {
+  const text   = document.getElementById('entryText').value.trim();
+  const photos = document.querySelectorAll('.photo-block').length;
+  if (!text && !photos) { toast('Nada para imprimir'); return; }
+  window.print();
+}
 
 function downloadEntry() {
   const date = document.getElementById('entryDate').value;
