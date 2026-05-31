@@ -482,6 +482,13 @@
 <div class="settings-backdrop" id="settingsBackdrop" onclick="closeSettingsIfBackdrop(event)">
   <div class="settings-panel">
     <div>
+      <div class="settings-title">nombre del diario</div>
+      <input type="text" id="diaryNameInput" class="auth-input"
+        placeholder="mi diario" maxlength="30"
+        oninput="applyDiaryName(this.value)"
+        onchange="saveDiaryName(this.value)" />
+    </div>
+    <div>
       <div class="settings-title">fondo de pantalla</div>
       <div class="wallpaper-preview" id="wallpaperPreview"></div>
       <div style="display:flex; gap:6px; flex-wrap:wrap;">
@@ -879,9 +886,10 @@ function initApp() {
   document.getElementById('currentUserName').textContent = profile.name;
 
   const prefs = loadPrefs(currentUser.uid);
-  if (prefs.color) applyColor(prefs.color);
-  if (prefs.font)  applyFont(prefs.font);
-  if (prefs.size)  { document.getElementById('sizeSlider').value = prefs.size; setFontSize(prefs.size); }
+  if (prefs.color)     applyColor(prefs.color);
+  if (prefs.font)      applyFont(prefs.font);
+  if (prefs.size)      { document.getElementById('sizeSlider').value = prefs.size; setFontSize(prefs.size); }
+  if (prefs.diaryName) applyDiaryName(prefs.diaryName);
 
   applyWallpaper(loadWallpaperData(currentUser.uid));
 
@@ -1206,6 +1214,8 @@ function setFontSize(val) {
 }
 
 function buildSettings() {
+  const prefs = loadPrefs(currentUser.uid);
+  document.getElementById('diaryNameInput').value = prefs.diaryName || '';
   document.getElementById('fontGrid').innerHTML = FONTS.map(f=>`
     <button class="font-option ${f.key===currentFontKey?'active':''}" data-key="${f.key}" onclick="applyFont('${f.key}')">
       <span class="font-option-name">${f.label}</span>
@@ -1215,6 +1225,17 @@ function buildSettings() {
     <button class="color-swatch ${c.key===currentColorKey?'active':''}" data-key="${c.key}"
       style="background:${c.bg}; border:2px solid ${c.ink2};"
       onclick="applyColor('${c.key}')" title="${c.key}" aria-label="Color ${c.key}"></button>`).join('');
+}
+
+function applyDiaryName(name) {
+  const n = (name||'').trim() || 'mi diario';
+  document.querySelector('.site-name').textContent   = n;
+  document.querySelector('.login-title').textContent = n;
+  document.title = n;
+}
+
+function saveDiaryName(name) {
+  if (currentUser) savePrefsData(currentUser.uid, { ...loadPrefs(currentUser.uid), diaryName: name.trim() });
 }
 
 function openSettings()             { buildSettings(); document.getElementById('settingsBackdrop').classList.add('open'); }
