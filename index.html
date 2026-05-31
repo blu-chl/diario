@@ -1052,19 +1052,28 @@ function renderList() {
    FOTOS — compresión + Firestore
 ══════════════════════════════════════ */
 function compressImage(dataUrl) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     const img = new Image();
+    img.onerror = reject;
     img.onload = () => {
-      const MAX = 1200;
-      let { width, height } = img;
-      if (width > MAX || height > MAX) {
-        const r = Math.min(MAX/width, MAX/height);
-        width = Math.round(width*r); height = Math.round(height*r);
-      }
-      const c = document.createElement('canvas');
-      c.width = width; c.height = height;
-      c.getContext('2d').drawImage(img, 0, 0, width, height);
-      resolve(c.toDataURL('image/jpeg', 0.72));
+      const tryCompress = (maxPx, quality) => {
+        let { width, height } = img;
+        if (width > maxPx || height > maxPx) {
+          const r = Math.min(maxPx/width, maxPx/height);
+          width = Math.round(width*r); height = Math.round(height*r);
+        }
+        const c = document.createElement('canvas');
+        c.width = width; c.height = height;
+        c.getContext('2d').drawImage(img, 0, 0, width, height);
+        return c.toDataURL('image/jpeg', quality);
+      };
+      // Intento 1: 1024px calidad media
+      let result = tryCompress(1024, 0.70);
+      // Si sigue siendo muy grande, comprimir más
+      if (result.length > 900000) result = tryCompress(800, 0.55);
+      if (result.length > 900000) result = tryCompress(600, 0.45);
+      if (!result || result === 'data:,') { reject(new Error('No se pudo comprimir')); return; }
+      resolve(result);
     };
     img.src = dataUrl;
   });
