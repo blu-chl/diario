@@ -13,7 +13,7 @@
     :root {
       --bg: #f5f0e8; --bg2: #ede8de;
       --ink: #1a1714; --ink2: #6b6460; --ink3: #a09890;
-      --accent: #8b6f47; --line: rgba(0,0,0,0.08);
+      --line: rgba(0,0,0,0.08);
       --font-body: 'Lora', Georgia, serif;
       --font-ui: 'Space Grotesk', sans-serif;
       --radius: 3px; --tr: 0.22s ease;
@@ -21,99 +21,71 @@
 
     body {
       background: var(--bg);
-      background-size: cover;
-      background-attachment: fixed;
-      background-position: center;
-      color: var(--ink);
-      font-family: var(--font-body);
-      min-height: 100vh;
-      transition: background-color var(--tr), color var(--tr);
+      background-size: cover; background-attachment: fixed; background-position: center;
+      color: var(--ink); font-family: var(--font-body);
+      min-height: 100vh; transition: background-color var(--tr), color var(--tr);
     }
 
-    /* ── LOGIN SCREEN ── */
+    /* ── LOGIN ── */
     #loginScreen {
-      position: fixed; inset: 0;
-      background: var(--bg);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      z-index: 1000; gap: 0;
+      position: fixed; inset: 0; background: var(--bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 1000;
     }
     #loginScreen.hidden { display: none; }
 
     .login-title {
       font-family: var(--font-body); font-style: italic;
-      font-size: 15px; color: var(--ink3);
-      letter-spacing: 0.08em; margin-bottom: 2.5rem;
+      font-size: 15px; color: var(--ink3); letter-spacing: 0.08em; margin-bottom: 2.5rem;
     }
 
     .users-grid {
       display: flex; flex-wrap: wrap; gap: 1.5rem;
-      justify-content: center; max-width: 560px;
-      padding: 0 1rem; margin-bottom: 2rem;
+      justify-content: center; max-width: 560px; padding: 0 1rem; margin-bottom: 2rem;
     }
-
     .user-card {
-      display: flex; flex-direction: column;
-      align-items: center; gap: 8px;
-      cursor: pointer; padding: 12px;
-      border-radius: 8px; transition: background var(--tr);
-      min-width: 90px; position: relative;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      cursor: pointer; padding: 12px; border-radius: 8px;
+      transition: background var(--tr); min-width: 90px; position: relative;
     }
     .user-card:hover { background: var(--bg2); }
-
     .user-avatar {
-      width: 72px; height: 72px; border-radius: 50%;
-      background: var(--bg2); border: 2px solid var(--line);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px; font-family: var(--font-ui); font-weight: 500;
-      color: var(--ink2); overflow: hidden; transition: border-color var(--tr);
+      width: 72px; height: 72px; border-radius: 50%; background: var(--bg2);
+      border: 2px solid var(--line); display: flex; align-items: center; justify-content: center;
+      font-size: 28px; overflow: hidden; transition: border-color var(--tr);
     }
     .user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .user-card:hover .user-avatar { border-color: var(--ink3); }
     .user-card-name { font-family: var(--font-ui); font-size: 12px; color: var(--ink2); text-align: center; }
-
     .user-card-del {
-      position: absolute; top: 4px; right: 4px;
-      background: none; border: none;
-      font-size: 12px; color: var(--ink3);
-      cursor: pointer; opacity: 0; padding: 2px 4px;
-      border-radius: 50%; transition: opacity var(--tr);
+      position: absolute; top: 4px; right: 4px; background: none; border: none;
+      font-size: 12px; color: var(--ink3); cursor: pointer; opacity: 0;
+      padding: 2px 4px; border-radius: 50%; transition: opacity var(--tr);
     }
     .user-card:hover .user-card-del { opacity: 1; }
     .user-card-del:hover { color: #b94040; }
-
     .add-user-card {
-      display: flex; flex-direction: column;
-      align-items: center; gap: 8px; cursor: pointer;
-      padding: 12px; border-radius: 8px;
-      transition: background var(--tr); min-width: 90px;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      cursor: pointer; padding: 12px; border-radius: 8px; transition: background var(--tr); min-width: 90px;
     }
     .add-user-card:hover { background: var(--bg2); }
     .add-user-icon {
-      width: 72px; height: 72px; border-radius: 50%;
-      border: 2px dashed var(--ink3);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 28px; color: var(--ink3);
+      width: 72px; height: 72px; border-radius: 50%; border: 2px dashed var(--ink3);
+      display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--ink3);
     }
     .add-user-label { font-family: var(--font-ui); font-size: 12px; color: var(--ink3); }
-
-    .email-fallback {
-      font-family: var(--font-ui); font-size: 11px;
-      color: var(--ink3); text-decoration: underline;
-      cursor: pointer; margin-top: 0.25rem;
-    }
+    .email-fallback { font-family: var(--font-ui); font-size: 11px; color: var(--ink3); text-decoration: underline; cursor: pointer; }
     .email-fallback:hover { color: var(--ink2); }
 
-    /* Password prompt */
+    /* pw-prompt */
     .pw-prompt { display: flex; flex-direction: column; align-items: center; gap: 12px; animation: fadeIn 0.18s ease; }
     .pw-prompt.hidden { display: none; }
     .pw-back { font-family: var(--font-ui); font-size: 11px; color: var(--ink3); cursor: pointer; letter-spacing: 0.06em; }
     .pw-back:hover { color: var(--ink2); }
     .pw-who { font-family: var(--font-body); font-style: italic; font-size: 16px; color: var(--ink2); }
     .pw-avatar-sm {
-      width: 52px; height: 52px; border-radius: 50%;
-      background: var(--bg2); border: 2px solid var(--line);
-      display: flex; align-items: center; justify-content: center;
+      width: 52px; height: 52px; border-radius: 50%; background: var(--bg2);
+      border: 2px solid var(--line); display: flex; align-items: center; justify-content: center;
       font-size: 20px; overflow: hidden;
     }
     .pw-avatar-sm img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
@@ -121,116 +93,125 @@
     .pw-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--ink3); transition: background var(--tr), border-color var(--tr); }
     .pw-dot.filled { background: var(--ink); border-color: var(--ink); }
     .pw-input-real {
-      width: 160px; text-align: center; font-size: 14px;
-      font-family: var(--font-ui); border: none;
-      border-bottom: 1px solid var(--line); background: transparent;
+      width: 160px; text-align: center; font-size: 14px; font-family: var(--font-ui);
+      border: none; border-bottom: 1px solid var(--line); background: transparent;
       color: var(--ink); padding: 6px 0; outline: none;
     }
-    .pw-input-real:focus { border-bottom-color: var(--ink3); }
     .pw-error { font-family: var(--font-ui); font-size: 11px; color: #b94040; min-height: 16px; }
 
-    /* Email fallback form */
-    .email-login-form {
-      display: flex; flex-direction: column; gap: 1.25rem;
-      width: min(300px, 90vw); padding: 0 1rem;
-      animation: fadeIn 0.18s ease;
-    }
+    .email-login-form { display: flex; flex-direction: column; gap: 1.25rem; width: min(300px, 90vw); padding: 0 1rem; animation: fadeIn 0.18s ease; }
     .email-login-form.hidden { display: none; }
     .auth-field { display: flex; flex-direction: column; gap: 5px; }
     .auth-input {
-      font-family: var(--font-ui); font-size: 14px; color: var(--ink);
-      background: transparent; border: none;
-      border-bottom: 1px solid var(--line);
-      padding: 6px 0; outline: none; width: 100%;
+      font-family: var(--font-ui); font-size: 14px; color: var(--ink); background: transparent;
+      border: none; border-bottom: 1px solid var(--line); padding: 6px 0; outline: none; width: 100%;
       transition: border-color var(--tr);
     }
     .auth-input:focus { border-bottom-color: var(--ink3); }
     .auth-input::placeholder { color: var(--ink3); }
-    .auth-switch { font-family: var(--font-ui); font-size: 11px; color: var(--ink3); text-align: center; }
-    .auth-switch span { color: var(--ink2); cursor: pointer; text-decoration: underline; }
 
-    /* New user modal */
+    /* ── MODALS ── */
     .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 2000; align-items: center; justify-content: center; }
     .modal-backdrop.open { display: flex; }
     .modal {
-      background: var(--bg); border: 1px solid var(--line);
-      border-radius: 8px; padding: 2rem 1.75rem;
-      width: min(360px, 92vw); display: flex;
-      flex-direction: column; gap: 1.25rem;
-      max-height: 92vh; overflow-y: auto;
+      background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+      padding: 2rem 1.75rem; width: min(360px, 92vw);
+      display: flex; flex-direction: column; gap: 1.25rem; max-height: 92vh; overflow-y: auto;
     }
     .modal-title { font-family: var(--font-ui); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); }
     .modal label { font-family: var(--font-ui); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); display: block; margin-bottom: 5px; }
     .modal input[type="text"], .modal input[type="password"], .modal input[type="email"] {
-      width: 100%; font-family: var(--font-ui); font-size: 14px;
-      color: var(--ink); background: transparent; border: none;
-      border-bottom: 1px solid var(--line); padding: 6px 0; outline: none;
+      width: 100%; font-family: var(--font-ui); font-size: 14px; color: var(--ink);
+      background: transparent; border: none; border-bottom: 1px solid var(--line); padding: 6px 0; outline: none;
     }
     .modal input:focus { border-bottom-color: var(--ink3); }
     .emoji-picker { display: flex; flex-wrap: wrap; gap: 6px; }
     .emoji-btn {
-      width: 34px; height: 34px; border: 1px solid var(--line);
-      background: transparent; border-radius: var(--radius);
-      font-size: 18px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background var(--tr);
+      width: 34px; height: 34px; border: 1px solid var(--line); background: transparent;
+      border-radius: var(--radius); font-size: 18px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: background var(--tr);
     }
     .emoji-btn:hover, .emoji-btn.active { background: var(--bg2); border-color: var(--ink3); }
     .avatar-upload-btn {
-      font-family: var(--font-ui); font-size: 11px; color: var(--ink3);
-      border: 1px dashed var(--ink3); background: transparent;
-      padding: 6px 12px; border-radius: var(--radius);
-      cursor: pointer; display: inline-block; text-align: center;
+      font-family: var(--font-ui); font-size: 11px; color: var(--ink3); border: 1px dashed var(--ink3);
+      background: transparent; padding: 6px 12px; border-radius: var(--radius); cursor: pointer; display: inline-block;
     }
     .avatar-preview { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); display: none; }
     .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
     .modal-error { font-family: var(--font-ui); font-size: 11px; color: #b94040; min-height: 16px; }
+
+    /* ── DIARY SCREEN ── */
+    #diaryScreen {
+      position: fixed; inset: 0; background: var(--bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 500;
+    }
+    #diaryScreen.hidden { display: none; }
+
+    .diary-topbar {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+    }
+
+    .diary-card {
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      cursor: pointer; padding: 12px; border-radius: 8px;
+      transition: background var(--tr); min-width: 90px; position: relative;
+    }
+    .diary-card:hover { background: var(--bg2); }
+    .diary-avatar {
+      width: 72px; height: 72px; border-radius: 16px;
+      background: var(--bg2); border: 2px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 30px; transition: border-color var(--tr);
+    }
+    .diary-card:hover .diary-avatar { border-color: var(--ink3); }
+    .diary-card-name { font-family: var(--font-ui); font-size: 12px; color: var(--ink2); text-align: center; max-width: 90px; }
+    .diary-card-del {
+      position: absolute; top: 4px; right: 4px; background: none; border: none;
+      font-size: 12px; color: var(--ink3); cursor: pointer; opacity: 0;
+      padding: 2px 4px; border-radius: 50%; transition: opacity var(--tr);
+    }
+    .diary-card:hover .diary-card-del { opacity: 1; }
+    .diary-card-del:hover { color: #b94040; }
 
     /* ── APP ── */
     #appScreen { display: none; }
     #appScreen.visible { display: block; }
 
     .page {
-      max-width: 680px; margin: 0 auto;
-      padding: 3rem 2rem 6rem;
-      background: var(--bg);
-      transition: box-shadow 0.3s;
+      max-width: 680px; margin: 0 auto; padding: 3rem 2rem 6rem;
+      background: var(--bg); transition: box-shadow 0.3s;
     }
-    body.has-wallpaper .page {
-      box-shadow: 0 0 60px rgba(0,0,0,0.18);
-      min-height: 100vh;
-    }
+    body.has-wallpaper .page { box-shadow: 0 0 60px rgba(0,0,0,0.18); min-height: 100vh; }
 
     .top-bar {
       display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 3rem; padding-bottom: 1rem;
-      border-bottom: 1px solid var(--line);
+      margin-bottom: 3rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line);
     }
+    .top-bar-left { display: flex; align-items: center; gap: 10px; }
+    .back-btn {
+      font-family: var(--font-ui); font-size: 11px; color: var(--ink3);
+      cursor: pointer; letter-spacing: 0.06em; transition: color var(--tr);
+    }
+    .back-btn:hover { color: var(--ink2); }
     .site-name { font-family: var(--font-body); font-size: 13px; letter-spacing: 0.15em; text-transform: lowercase; color: var(--ink2); font-style: italic; }
     .top-actions { display: flex; gap: 6px; align-items: center; }
     .current-user {
-      display: flex; align-items: center; gap: 6px;
-      cursor: pointer; padding: 4px 8px;
-      border-radius: 20px; border: 1px solid var(--line);
-      transition: background var(--tr);
+      display: flex; align-items: center; gap: 6px; cursor: pointer;
+      padding: 4px 8px; border-radius: 20px; border: 1px solid var(--line); transition: background var(--tr);
     }
     .current-user:hover { background: var(--bg2); }
     .current-user-avatar {
-      width: 22px; height: 22px; border-radius: 50%;
-      background: var(--bg2); display: flex;
-      align-items: center; justify-content: center;
-      font-size: 13px; overflow: hidden;
+      width: 22px; height: 22px; border-radius: 50%; background: var(--bg2);
+      display: flex; align-items: center; justify-content: center; font-size: 13px; overflow: hidden;
     }
     .current-user-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     .current-user-name { font-family: var(--font-ui); font-size: 11px; color: var(--ink2); }
 
     .btn {
-      font-family: var(--font-ui); font-size: 11px;
-      letter-spacing: 0.06em; text-transform: uppercase;
-      padding: 6px 12px; border: 1px solid var(--line);
-      background: transparent; color: var(--ink2);
-      cursor: pointer; border-radius: var(--radius);
-      transition: all var(--tr);
+      font-family: var(--font-ui); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 6px 12px; border: 1px solid var(--line); background: transparent; color: var(--ink2);
+      cursor: pointer; border-radius: var(--radius); transition: all var(--tr);
       display: inline-flex; align-items: center; gap: 5px; white-space: nowrap;
     }
     .btn:hover { background: var(--bg2); color: var(--ink); border-color: rgba(0,0,0,0.15); }
@@ -244,25 +225,27 @@
     input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.35; cursor: pointer; filter: var(--cal-filter, none); }
 
     .location-wrap { margin-bottom: 0.5rem; }
-    .location-input { font-family: var(--font-ui); font-size: 13px; color: var(--ink); background: transparent; border: none; outline: none; padding: 2px 0; width: 100%; border-bottom: 1px solid transparent; transition: border-color var(--tr); }
+    .location-input {
+      font-family: var(--font-ui); font-size: 13px; color: var(--ink); background: transparent;
+      border: none; outline: none; padding: 2px 0; width: 100%;
+      border-bottom: 1px solid transparent; transition: border-color var(--tr);
+    }
     .location-input:focus { border-bottom-color: var(--line); }
     .location-input::placeholder { color: var(--ink3); }
 
     .divider { border: none; border-top: 1px solid var(--line); margin: 1rem 0 1.5rem; }
 
-    .photo-blocks { display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 1.5rem; }
-    .photo-block { display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--line); border-radius: 4px; padding: 0.75rem; position: relative; }
-    .photo-block img { width: 100%; max-height: 480px; object-fit: cover; border-radius: 2px; display: block; }
-    .photo-caption { font-family: var(--font-body); font-size: 14px; font-style: italic; color: var(--ink2); background: transparent; border: none; outline: none; width: 100%; resize: none; line-height: 1.6; padding: 4px 0; border-bottom: 1px solid transparent; transition: border-color var(--tr); }
-    .photo-caption:focus { border-bottom-color: var(--line); }
-    .photo-caption::placeholder { color: var(--ink3); }
-    .photo-block-del { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.45); color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity var(--tr); }
-    .photo-block:hover .photo-block-del { opacity: 1; }
-
-    .entry-area { width: 100%; min-height: 320px; resize: none; font-family: var(--font-body); font-size: 17px; line-height: 1.9; color: var(--ink); background: transparent; border: none; outline: none; display: block; }
+    .entry-area {
+      width: 100%; min-height: 320px; resize: none;
+      font-family: var(--font-body); font-size: 17px; line-height: 1.9;
+      color: var(--ink); background: transparent; border: none; outline: none; display: block;
+    }
     .entry-area::placeholder { color: var(--ink3); font-style: italic; }
 
-    .toolbar { display: flex; align-items: center; justify-content: space-between; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); flex-wrap: wrap; gap: 8px; }
+    .toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line); flex-wrap: wrap; gap: 8px;
+    }
     .toolbar-left { display: flex; gap: 6px; flex-wrap: wrap; }
     .toolbar-right { display: flex; gap: 6px; align-items: center; }
     .char-count { font-family: var(--font-ui); font-size: 11px; color: var(--ink3); }
@@ -283,10 +266,14 @@
     .entry-row-del:hover { color: #b94040; }
     .empty-state { font-family: var(--font-body); font-style: italic; color: var(--ink3); font-size: 14px; padding: 1rem 0; }
 
-    /* ── Settings panel ── */
+    /* ── SETTINGS ── */
     .settings-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 500; align-items: flex-start; justify-content: flex-end; }
     .settings-backdrop.open { display: flex; }
-    .settings-panel { background: var(--bg); border-left: 1px solid var(--line); width: min(320px, 92vw); height: 100vh; overflow-y: auto; padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 2rem; animation: slideIn 0.22s ease; }
+    .settings-panel {
+      background: var(--bg); border-left: 1px solid var(--line); width: min(320px, 92vw); height: 100vh;
+      overflow-y: auto; padding: 2rem 1.5rem; display: flex; flex-direction: column; gap: 2rem;
+      animation: slideIn 0.22s ease;
+    }
     .settings-title { font-family: var(--font-ui); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); margin-bottom: 0.75rem; }
     .font-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .font-option { border: 1px solid var(--line); background: transparent; padding: 10px 10px 8px; cursor: pointer; border-radius: var(--radius); text-align: left; transition: all var(--tr); }
@@ -301,17 +288,10 @@
     .size-row { display: flex; align-items: center; gap: 10px; }
     .size-row input[type="range"] { flex: 1; accent-color: var(--ink); cursor: pointer; }
     .size-label { font-family: var(--font-ui); font-size: 11px; color: var(--ink2); min-width: 24px; text-align: right; }
-
-    /* Wallpaper controls */
-    .wallpaper-preview {
-      width: 100%; height: 80px; border-radius: 4px;
-      border: 1px solid var(--line); background-size: cover;
-      background-position: center; margin-bottom: 8px;
-      display: none; position: relative;
-    }
+    .wallpaper-preview { width: 100%; height: 80px; border-radius: 4px; border: 1px solid var(--line); background-size: cover; background-position: center; margin-bottom: 8px; display: none; }
     .wallpaper-preview.visible { display: block; }
 
-    /* ── Toast ── */
+    /* ── TOAST ── */
     .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--ink); color: var(--bg); font-family: var(--font-ui); font-size: 12px; padding: 9px 18px; border-radius: 20px; opacity: 0; pointer-events: none; transition: opacity 0.25s, transform 0.25s; white-space: nowrap; z-index: 3000; }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -326,12 +306,10 @@
     }
 
     @media print {
-      #loginScreen, .top-bar, .toolbar, .entries-section,
+      #loginScreen, #diaryScreen, .top-bar, .toolbar, .entries-section,
       .settings-backdrop, .toast { display: none !important; }
       body { background: white !important; background-image: none !important; }
       .page { max-width: 100% !important; padding: 2cm !important; box-shadow: none !important; margin: 0 !important; }
-      .photo-block { break-inside: avoid; border: none !important; }
-      .photo-caption { border: none !important; }
     }
   </style>
 </head>
@@ -343,7 +321,7 @@
   <div class="users-grid" id="usersGrid"></div>
   <div style="display:flex; gap:1.25rem; margin-top:0.25rem;">
     <span class="email-fallback" id="emailFallbackLink" onclick="showEmailLogin()">Iniciar con correo</span>
-    <span class="email-fallback" id="forgotLink" onclick="showForgotForm()">¿Olvidaste tu contraseña?</span>
+    <span class="email-fallback" onclick="showForgotForm()">¿Olvidaste tu contraseña?</span>
   </div>
 
   <div class="pw-prompt hidden" id="pwPrompt">
@@ -352,10 +330,8 @@
     <span class="pw-who" id="pwWho"></span>
     <div>
       <div class="pw-dots" id="pwDots"></div>
-      <input type="password" class="pw-input-real" id="pwInput"
-        placeholder="contraseña" maxlength="30"
-        oninput="onPwInput()"
-        onkeydown="if(event.key==='Enter') tryLogin()" />
+      <input type="password" class="pw-input-real" id="pwInput" placeholder="contraseña" maxlength="30"
+        oninput="onPwInput()" onkeydown="if(event.key==='Enter') tryLogin()" />
     </div>
     <p class="pw-error" id="pwError"></p>
     <button class="btn btn-primary" id="pwLoginBtn" onclick="tryLogin()">Entrar</button>
@@ -391,22 +367,13 @@
   </div>
 </div>
 
-<!-- ══════════════════ NEW PROFILE MODAL ══════════════════ -->
+<!-- ══════════════════ NEW USER MODAL ══════════════════ -->
 <div class="modal-backdrop" id="newUserModal">
   <div class="modal">
     <div class="modal-title">nuevo perfil</div>
-    <div>
-      <label>nombre</label>
-      <input type="text" id="nuName" placeholder="Tu nombre" maxlength="20" />
-    </div>
-    <div>
-      <label>correo</label>
-      <input type="email" id="nuEmail" placeholder="tu@correo.com" />
-    </div>
-    <div>
-      <label>contraseña</label>
-      <input type="password" id="nuPass" placeholder="Mínimo 6 caracteres" maxlength="30" />
-    </div>
+    <div><label>nombre</label><input type="text" id="nuName" placeholder="Tu nombre" maxlength="20" /></div>
+    <div><label>correo</label><input type="email" id="nuEmail" placeholder="tu@correo.com" /></div>
+    <div><label>contraseña</label><input type="password" id="nuPass" placeholder="Mínimo 6 caracteres" maxlength="30" /></div>
     <div>
       <label>ícono</label>
       <div class="emoji-picker" id="emojiPicker"></div>
@@ -424,11 +391,43 @@
   </div>
 </div>
 
+<!-- ══════════════════ DIARY SCREEN ══════════════════ -->
+<div id="diaryScreen" class="hidden">
+  <div class="diary-topbar">
+    <div class="current-user" onclick="logout()" title="Cerrar sesión">
+      <div class="current-user-avatar" id="diaryUserAvatar"></div>
+      <span class="current-user-name" id="diaryUserName"></span>
+    </div>
+  </div>
+  <p class="login-title">mis diarios</p>
+  <div class="users-grid" id="diariesGrid"></div>
+</div>
+
+<!-- ══════════════════ NEW DIARY MODAL ══════════════════ -->
+<div class="modal-backdrop" id="newDiaryModal">
+  <div class="modal">
+    <div class="modal-title">nuevo diario</div>
+    <div><label>nombre</label><input type="text" id="ndName" placeholder="Ej: Diario de sueños" maxlength="30" /></div>
+    <div>
+      <label>ícono</label>
+      <div class="emoji-picker" id="diaryEmojiPicker"></div>
+    </div>
+    <p class="modal-error" id="ndError"></p>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeNewDiaryModal()">Cancelar</button>
+      <button class="btn btn-primary" id="ndBtn" onclick="createDiary()">Crear</button>
+    </div>
+  </div>
+</div>
+
 <!-- ══════════════════ APP SCREEN ══════════════════ -->
 <div id="appScreen">
   <div class="page">
     <div class="top-bar">
-      <span class="site-name">mi diario</span>
+      <div class="top-bar-left">
+        <span class="back-btn" onclick="backToDiaries()">← diarios</span>
+        <span class="site-name" id="siteName">mi diario</span>
+      </div>
       <div class="top-actions">
         <span class="save-dot" id="saveDot"></span>
         <span class="char-count" id="charCount">0</span>
@@ -447,8 +446,7 @@
     <div class="location-wrap">
       <label class="date-label" for="entryLocation">ubicación</label>
       <input type="text" class="location-input" id="entryLocation"
-        placeholder="¿Dónde estás?" maxlength="80"
-        oninput="setDirty()" autocomplete="off" />
+        placeholder="¿Dónde estás?" maxlength="80" oninput="setDirty()" autocomplete="off" />
     </div>
     <hr class="divider" />
     <textarea class="entry-area" id="entryText" placeholder="¿Qué pasó hoy?" spellcheck="true"></textarea>
@@ -457,7 +455,7 @@
       <div class="toolbar-left">
         <button class="btn btn-primary" onclick="saveEntry()">Guardar</button>
         <button class="btn" onclick="newEntry()">Nueva entrada</button>
-        <button class="btn" onclick="confirmClear()" title="Borrar todo lo escrito">↺ Limpiar</button>
+        <button class="btn" onclick="confirmClear()">↺ Limpiar</button>
       </div>
       <div class="toolbar-right">
         <button class="btn" onclick="printEntry()">↓ PDF</button>
@@ -473,13 +471,13 @@
   </div>
 </div>
 
-<!-- Settings panel -->
+<!-- ══════════════════ SETTINGS ══════════════════ -->
 <div class="settings-backdrop" id="settingsBackdrop" onclick="closeSettingsIfBackdrop(event)">
   <div class="settings-panel">
     <div>
       <div class="settings-title">nombre del diario</div>
       <input type="text" id="diaryNameInput" class="auth-input"
-        placeholder="mi diario" maxlength="30"
+        placeholder="Mi Diario" maxlength="30"
         oninput="applyDiaryName(this.value)"
         onchange="saveDiaryName(this.value)" />
     </div>
@@ -517,11 +515,9 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
 <script>
 /* ══════════════════════════════════════
    FIREBASE
@@ -541,6 +537,7 @@ const db   = firebase.firestore();
    STATE
 ══════════════════════════════════════ */
 let currentUser        = null;
+let currentDiary       = null;
 let pendingProfile     = null;
 let unsubscribeEntries = null;
 let cachedEntries      = [];
@@ -548,43 +545,26 @@ let currentFontKey     = 'lora';
 let currentColorKey    = 'cream';
 let currentSize        = 17;
 let selectedEmoji      = '📖';
+let selectedDiaryEmoji = '📖';
 let avatarDataUrl      = null;
 
-/* ══════════════════════════════════════
-   PROFILES (localStorage)
-══════════════════════════════════════ */
-const PROFILES_KEY = 'diario_profiles_v4';
-function loadProfiles()      { try { return JSON.parse(localStorage.getItem(PROFILES_KEY)||'[]'); } catch(e) { return []; } }
-function saveProfiles(arr)   { localStorage.setItem(PROFILES_KEY, JSON.stringify(arr)); }
-
-function getProfile(uid) {
-  return loadProfiles().find(p => p.id === uid) || null;
-}
+const EMOJIS = ['📖','✏️','🌸','🌙','☁️','🦋','🌿','🔮','🌊','⭐','🎨','🕯️','🏆','⚽','🎵','🧠','🌍','💭','🎬','🍃'];
 
 /* ══════════════════════════════════════
    AUTH STATE
 ══════════════════════════════════════ */
-auth.onAuthStateChanged(user => {
+auth.onAuthStateChanged(async user => {
   if (user) {
     currentUser = user;
-    // Ensure profile exists locally
-    let profiles = loadProfiles();
-    if (!profiles.find(p => p.id === user.uid)) {
-      profiles.push({
-        id: user.uid,
-        name: user.displayName || user.email.split('@')[0],
-        emoji: '📖', avatar: null,
-        email: user.email
-      });
-      saveProfiles(profiles);
-    }
     document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('appScreen').classList.add('visible');
-    initApp();
+    document.getElementById('appScreen').classList.remove('visible');
+    document.getElementById('diaryScreen').classList.remove('hidden');
+    await loadDiaryScreen();
   } else {
     if (unsubscribeEntries) { unsubscribeEntries(); unsubscribeEntries = null; }
-    currentUser = null; cachedEntries = [];
+    currentUser = null; currentDiary = null; cachedEntries = [];
     document.getElementById('appScreen').classList.remove('visible');
+    document.getElementById('diaryScreen').classList.add('hidden');
     document.getElementById('loginScreen').classList.remove('hidden');
     renderLoginScreen();
   }
@@ -593,13 +573,10 @@ auth.onAuthStateChanged(user => {
 /* ══════════════════════════════════════
    LOGIN SCREEN
 ══════════════════════════════════════ */
-const EMOJIS = ['📖','✏️','🌸','🌙','☁️','🦋','🌿','🔮','🌊','⭐','🎨','🕯️'];
-
 function renderLoginScreen() {
   const profiles = loadProfiles();
   const grid = document.getElementById('usersGrid');
   grid.innerHTML = '';
-
   profiles.forEach(p => {
     const card = document.createElement('div');
     card.className = 'user-card';
@@ -608,27 +585,24 @@ function renderLoginScreen() {
     card.innerHTML = `
       <div class="user-avatar">${avatarHtml}</div>
       <span class="user-card-name">${p.name}</span>
-      <button class="user-card-del" onclick="event.stopPropagation();removeProfile('${p.id}')" title="Quitar perfil">✕</button>
-    `;
+      <button class="user-card-del" onclick="event.stopPropagation();removeProfile('${p.id}')" title="Quitar">✕</button>`;
     grid.appendChild(card);
   });
-
   const addCard = document.createElement('div');
   addCard.className = 'add-user-card';
   addCard.onclick = openNewUserModal;
   addCard.innerHTML = `<div class="add-user-icon">+</div><span class="add-user-label">Nuevo perfil</span>`;
   grid.appendChild(addCard);
-
   document.getElementById('usersGrid').classList.remove('hidden');
   document.getElementById('pwPrompt').classList.add('hidden');
   document.getElementById('emailLoginForm').classList.add('hidden');
+  document.getElementById('forgotForm').classList.add('hidden');
   document.getElementById('emailFallbackLink').style.display = '';
 }
 
 function removeProfile(id) {
-  if (!confirm('¿Quitar este perfil de esta pantalla?\n(No elimina la cuenta ni los datos)')) return;
-  const profiles = loadProfiles().filter(p => p.id !== id);
-  saveProfiles(profiles);
+  if (!confirm('¿Quitar este perfil de esta pantalla?')) return;
+  saveProfiles(loadProfiles().filter(p => p.id !== id));
   renderLoginScreen();
 }
 
@@ -651,18 +625,13 @@ function selectProfile(p) {
 
 function buildPwDots(val) {
   const len = Math.min(val.length, 8);
-  document.getElementById('pwDots').innerHTML = Array.from({length:8}, (_,i) =>
-    `<div class="pw-dot ${i < len ? 'filled' : ''}"></div>`
-  ).join('');
+  document.getElementById('pwDots').innerHTML = Array.from({length:8},(_,i) =>
+    `<div class="pw-dot ${i<len?'filled':''}"></div>`).join('');
 }
-
-function onPwInput() {
-  buildPwDots(document.getElementById('pwInput').value);
-  document.getElementById('pwError').textContent = '';
-}
+function onPwInput() { buildPwDots(document.getElementById('pwInput').value); document.getElementById('pwError').textContent = ''; }
 
 async function tryLogin() {
-  const pw  = document.getElementById('pwInput').value;
+  const pw = document.getElementById('pwInput').value;
   const btn = document.getElementById('pwLoginBtn');
   if (!pw) return;
   btn.textContent = '…'; btn.disabled = true;
@@ -692,20 +661,23 @@ function showEmailLogin() {
   setTimeout(() => document.getElementById('elEmail').focus(), 50);
 }
 
-async function forgotPassword() {
-  if (!pendingProfile) return;
+async function doEmailLogin() {
+  const email = document.getElementById('elEmail').value.trim();
+  const pass  = document.getElementById('elPass').value;
+  const btn   = document.getElementById('elBtn');
+  if (!email || !pass) { document.getElementById('elError').textContent = 'Completa los campos'; return; }
+  btn.textContent = '…'; btn.disabled = true;
   try {
-    await auth.sendPasswordResetEmail(pendingProfile.email);
-    toast('Revisa tu correo: ' + pendingProfile.email);
+    await auth.signInWithEmailAndPassword(email, pass);
   } catch(e) {
-    toast('No se pudo enviar el correo');
+    document.getElementById('elError').textContent = fbError(e.code);
+    btn.textContent = 'Entrar'; btn.disabled = false;
   }
 }
 
 function showForgotForm() {
   document.getElementById('usersGrid').classList.add('hidden');
   document.getElementById('emailFallbackLink').style.display = 'none';
-  document.getElementById('forgotLink').style.display = 'none';
   document.getElementById('forgotForm').classList.remove('hidden');
   document.getElementById('forgotEmail').value = '';
   document.getElementById('forgotError').textContent = '';
@@ -732,31 +704,40 @@ async function sendForgot() {
   }
 }
 
-async function doEmailLogin() {
-  const email = document.getElementById('elEmail').value.trim();
-  const pass  = document.getElementById('elPass').value;
-  const btn   = document.getElementById('elBtn');
-  if (!email || !pass) { document.getElementById('elError').textContent = 'Completa los campos'; return; }
-  btn.textContent = '…'; btn.disabled = true;
+async function forgotPassword() {
+  if (!pendingProfile) return;
   try {
-    await auth.signInWithEmailAndPassword(email, pass);
-  } catch(e) {
-    document.getElementById('elError').textContent = fbError(e.code);
-    btn.textContent = 'Entrar'; btn.disabled = false;
-  }
+    await auth.sendPasswordResetEmail(pendingProfile.email);
+    toast('Revisa tu correo: ' + pendingProfile.email);
+  } catch(e) { toast('No se pudo enviar el correo'); }
+}
+
+async function logout() {
+  if (!confirm('¿Cerrar sesión?')) return;
+  await auth.signOut();
+}
+
+function fbError(code) {
+  const map = {
+    'auth/invalid-email': 'Correo inválido',
+    'auth/user-not-found': 'No hay cuenta con ese correo',
+    'auth/wrong-password': 'Contraseña incorrecta',
+    'auth/invalid-credential': 'Correo o contraseña incorrectos',
+    'auth/email-already-in-use': 'Ese correo ya está en uso',
+    'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres',
+    'auth/too-many-requests': 'Demasiados intentos. Intenta más tarde',
+  };
+  return map[code] || 'Error. Intenta de nuevo';
 }
 
 /* ══════════════════════════════════════
-   NEW PROFILE MODAL
+   NEW USER MODAL
 ══════════════════════════════════════ */
 function openNewUserModal() {
   selectedEmoji = '📖'; avatarDataUrl = null;
-  document.getElementById('nuName').value  = '';
-  document.getElementById('nuEmail').value = '';
-  document.getElementById('nuPass').value  = '';
+  ['nuName','nuEmail','nuPass'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('nuError').textContent = '';
-  document.getElementById('nuBtn').textContent = 'Crear';
-  document.getElementById('nuBtn').disabled = false;
+  document.getElementById('nuBtn').textContent = 'Crear'; document.getElementById('nuBtn').disabled = false;
   document.getElementById('avatarPreview').style.display = 'none';
   document.getElementById('avatarPreview').src = '';
   document.getElementById('avatarFileInput').value = '';
@@ -764,21 +745,16 @@ function openNewUserModal() {
   document.getElementById('newUserModal').classList.add('open');
   setTimeout(() => document.getElementById('nuName').focus(), 100);
 }
-
 function closeNewUserModal() { document.getElementById('newUserModal').classList.remove('open'); }
 
 function buildEmojiPicker() {
   document.getElementById('emojiPicker').innerHTML = EMOJIS.map(e =>
-    `<button class="emoji-btn ${e===selectedEmoji?'active':''}" onclick="pickEmoji('${e}')">${e}</button>`
-  ).join('');
+    `<button class="emoji-btn ${e===selectedEmoji?'active':''}" onclick="pickEmoji('${e}')">${e}</button>`).join('');
 }
-
 function pickEmoji(e) {
   selectedEmoji = e; avatarDataUrl = null;
-  document.getElementById('avatarPreview').style.display = 'none';
-  buildEmojiPicker();
+  document.getElementById('avatarPreview').style.display = 'none'; buildEmojiPicker();
 }
-
 function previewAvatar(input) {
   const file = input.files[0]; if (!file) return;
   const reader = new FileReader();
@@ -786,7 +762,7 @@ function previewAvatar(input) {
     avatarDataUrl = e.target.result;
     const img = document.getElementById('avatarPreview');
     img.src = avatarDataUrl; img.style.display = 'block';
-    document.querySelectorAll('.emoji-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#emojiPicker .emoji-btn').forEach(b => b.classList.remove('active'));
   };
   reader.readAsDataURL(file);
 }
@@ -804,51 +780,192 @@ async function createUser() {
   try {
     const cred = await auth.createUserWithEmailAndPassword(email, pass);
     await cred.user.updateProfile({ displayName: name });
-    const profile = { id: cred.user.uid, name, emoji: avatarDataUrl ? null : selectedEmoji, avatar: avatarDataUrl || null, email };
     const profiles = loadProfiles();
-    profiles.push(profile);
+    profiles.push({ id: cred.user.uid, name, emoji: avatarDataUrl?null:selectedEmoji, avatar: avatarDataUrl||null, email });
     saveProfiles(profiles);
     closeNewUserModal();
     toast('Perfil creado ✓');
-    // onAuthStateChanged handles the transition
   } catch(e) {
     errEl.textContent = fbError(e.code);
     btn.textContent = 'Crear'; btn.disabled = false;
   }
 }
 
-async function logout() {
-  if (!confirm('¿Cerrar sesión?')) return;
-  await auth.signOut();
+/* ══════════════════════════════════════
+   PROFILES (localStorage)
+══════════════════════════════════════ */
+const PROFILES_KEY = 'diario_profiles_v4';
+function loadProfiles()    { try { return JSON.parse(localStorage.getItem(PROFILES_KEY)||'[]'); } catch(e) { return []; } }
+function saveProfiles(arr) { localStorage.setItem(PROFILES_KEY, JSON.stringify(arr)); }
+function getProfile(uid)   { return loadProfiles().find(p => p.id === uid) || null; }
+
+/* ══════════════════════════════════════
+   DIARY SCREEN
+══════════════════════════════════════ */
+async function loadDiaryScreen() {
+  const profile = getProfile(currentUser.uid) || { name: currentUser.displayName || currentUser.email.split('@')[0], emoji: '📖', avatar: null };
+
+  // Ensure profile is in localStorage
+  if (!getProfile(currentUser.uid)) {
+    const profiles = loadProfiles();
+    profiles.push({ id: currentUser.uid, name: profile.name, emoji: '📖', avatar: null, email: currentUser.email });
+    saveProfiles(profiles);
+  }
+
+  // Update diary screen header
+  const avatarEl = document.getElementById('diaryUserAvatar');
+  if (profile.avatar) {
+    avatarEl.innerHTML = `<img src="${profile.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
+  } else {
+    avatarEl.textContent = profile.emoji || profile.name[0].toUpperCase();
+  }
+  document.getElementById('diaryUserName').textContent = profile.name;
+
+  // Load diaries from Firestore
+  const snap = await db.collection('users').doc(currentUser.uid).collection('diaries').orderBy('createdAt','asc').get();
+  let diaries = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  // If no diaries, migrate old entries into a default diary
+  if (diaries.length === 0) {
+    const defaultDiary = await createDefaultDiary();
+    await migrateOldEntries(defaultDiary.id);
+    diaries = [defaultDiary];
+  }
+
+  renderDiariesGrid(diaries);
 }
 
-function fbError(code) {
-  const map = {
-    'auth/invalid-email':        'Correo inválido',
-    'auth/user-not-found':       'No hay cuenta con ese correo',
-    'auth/wrong-password':       'Contraseña incorrecta',
-    'auth/invalid-credential':   'Correo o contraseña incorrectos',
-    'auth/email-already-in-use': 'Ese correo ya está en uso',
-    'auth/weak-password':        'La contraseña debe tener al menos 6 caracteres',
-    'auth/too-many-requests':    'Demasiados intentos. Intenta más tarde',
-  };
-  return map[code] || 'Error. Intenta de nuevo';
+function renderDiariesGrid(diaries) {
+  const grid = document.getElementById('diariesGrid');
+  grid.innerHTML = '';
+
+  diaries.forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'diary-card';
+    card.onclick = () => enterDiary(d);
+    card.innerHTML = `
+      <div class="diary-avatar">${d.emoji || '📖'}</div>
+      <span class="diary-card-name">${d.name}</span>
+      <button class="diary-card-del" onclick="event.stopPropagation();deleteDiary('${d.id}','${d.name}')" title="Eliminar diario">✕</button>`;
+    grid.appendChild(card);
+  });
+
+  const addCard = document.createElement('div');
+  addCard.className = 'add-user-card';
+  addCard.onclick = openNewDiaryModal;
+  addCard.innerHTML = `<div class="add-user-icon">+</div><span class="add-user-label">Nuevo diario</span>`;
+  grid.appendChild(addCard);
+}
+
+async function createDefaultDiary() {
+  const ref = await db.collection('users').doc(currentUser.uid).collection('diaries').add({
+    name: 'Mi Diario', emoji: '📖', createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+  return { id: ref.id, name: 'Mi Diario', emoji: '📖' };
+}
+
+async function migrateOldEntries(diaryId) {
+  const key = 'diario_migrated_' + currentUser.uid;
+  if (localStorage.getItem(key)) return;
+  try {
+    const snap = await db.collection('users').doc(currentUser.uid).collection('entries').get();
+    if (!snap.empty) {
+      const batch = db.batch();
+      snap.docs.forEach(doc => {
+        const ref = db.collection('users').doc(currentUser.uid)
+          .collection('diaries').doc(diaryId).collection('entries').doc(doc.id);
+        batch.set(ref, doc.data());
+      });
+      await batch.commit();
+      toast('Entradas anteriores migradas ✓');
+    }
+    localStorage.setItem(key, '1');
+  } catch(e) { console.error('Migration error:', e); }
+}
+
+function enterDiary(diary) {
+  currentDiary = diary;
+  document.getElementById('diaryScreen').classList.add('hidden');
+  document.getElementById('appScreen').classList.add('visible');
+  initApp();
+}
+
+function backToDiaries() {
+  if (unsubscribeEntries) { unsubscribeEntries(); unsubscribeEntries = null; }
+  currentDiary = null; cachedEntries = [];
+  document.getElementById('appScreen').classList.remove('visible');
+  document.getElementById('diaryScreen').classList.remove('hidden');
+  loadDiaryScreen();
+}
+
+async function deleteDiary(diaryId, diaryName) {
+  if (!confirm(`¿Eliminar el diario "${diaryName}" y todas sus entradas?`)) return;
+  try {
+    // Delete all entries
+    const entries = await db.collection('users').doc(currentUser.uid)
+      .collection('diaries').doc(diaryId).collection('entries').get();
+    const batch = db.batch();
+    entries.docs.forEach(d => batch.delete(d.ref));
+    batch.delete(db.collection('users').doc(currentUser.uid).collection('diaries').doc(diaryId));
+    await batch.commit();
+    toast('Diario eliminado');
+    loadDiaryScreen();
+  } catch(e) { toast('Error al eliminar'); }
 }
 
 /* ══════════════════════════════════════
-   PREFERENCES & PHOTOS (localStorage)
+   NEW DIARY MODAL
+══════════════════════════════════════ */
+function openNewDiaryModal() {
+  selectedDiaryEmoji = '📖';
+  document.getElementById('ndName').value = '';
+  document.getElementById('ndError').textContent = '';
+  document.getElementById('ndBtn').textContent = 'Crear'; document.getElementById('ndBtn').disabled = false;
+  buildDiaryEmojiPicker();
+  document.getElementById('newDiaryModal').classList.add('open');
+  setTimeout(() => document.getElementById('ndName').focus(), 100);
+}
+function closeNewDiaryModal() { document.getElementById('newDiaryModal').classList.remove('open'); }
+
+function buildDiaryEmojiPicker() {
+  document.getElementById('diaryEmojiPicker').innerHTML = EMOJIS.map(e =>
+    `<button class="emoji-btn ${e===selectedDiaryEmoji?'active':''}" onclick="pickDiaryEmoji('${e}')">${e}</button>`).join('');
+}
+function pickDiaryEmoji(e) { selectedDiaryEmoji = e; buildDiaryEmojiPicker(); }
+
+async function createDiary() {
+  const name  = document.getElementById('ndName').value.trim();
+  const errEl = document.getElementById('ndError');
+  const btn   = document.getElementById('ndBtn');
+  if (!name) { errEl.textContent = 'Escribe un nombre'; return; }
+  btn.textContent = '…'; btn.disabled = true;
+  try {
+    const ref = await db.collection('users').doc(currentUser.uid).collection('diaries').add({
+      name, emoji: selectedDiaryEmoji, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    closeNewDiaryModal();
+    toast('Diario creado ✓');
+    enterDiary({ id: ref.id, name, emoji: selectedDiaryEmoji });
+  } catch(e) {
+    errEl.textContent = 'Error al crear';
+    btn.textContent = 'Crear'; btn.disabled = false;
+  }
+}
+
+/* ══════════════════════════════════════
+   PREFERENCES (localStorage)
 ══════════════════════════════════════ */
 const PREFS_KEY = 'diario_prefs_v3';
 function loadPrefs(uid)        { try { return JSON.parse(localStorage.getItem(PREFS_KEY+'_'+uid)||'{}'); } catch(e) { return {}; } }
 function savePrefsData(uid, o) { localStorage.setItem(PREFS_KEY+'_'+uid, JSON.stringify(o)); }
 
-function photosKey(uid,date)           { return 'diario_photos_v1_'+uid+'_'+date; }
-function loadPhotos(uid,date)          { try { return JSON.parse(localStorage.getItem(photosKey(uid,date))||'[]'); } catch(e) { return []; } }
-function savePhotosLocal(uid,date,arr) { localStorage.setItem(photosKey(uid,date), JSON.stringify(arr)); }
-
-function wallpaperKey(uid) { return 'diario_wallpaper_v1_'+uid; }
+function wallpaperKey(uid)      { return 'diario_wallpaper_v1_'+uid; }
 function loadWallpaperData(uid) { try { return JSON.parse(localStorage.getItem(wallpaperKey(uid))||'null'); } catch(e) { return null; } }
 function saveWallpaperData(uid,d) { if(d) localStorage.setItem(wallpaperKey(uid),JSON.stringify(d)); else localStorage.removeItem(wallpaperKey(uid)); }
+
+// Legacy localStorage photos (for backward compat)
+function photosKey(uid,date)  { return 'diario_photos_v1_'+uid+'_'+date; }
+function loadPhotos(uid,date) { try { return JSON.parse(localStorage.getItem(photosKey(uid,date))||'[]'); } catch(e) { return []; } }
 
 /* ══════════════════════════════════════
    HELPERS
@@ -871,31 +988,34 @@ function toast(msg) {
    APP INIT
 ══════════════════════════════════════ */
 function initApp() {
-  const profile = getProfile(currentUser.uid) || { name: currentUser.displayName || currentUser.email.split('@')[0], emoji: '📖', avatar: null };
+  const profile  = getProfile(currentUser.uid) || { name: currentUser.displayName || '', emoji: '📖', avatar: null };
   const avatarEl = document.getElementById('currentUserAvatar');
   if (profile.avatar) {
-    avatarEl.innerHTML = `<img src="${profile.avatar}" alt="${profile.name}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
+    avatarEl.innerHTML = `<img src="${profile.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
   } else {
-    avatarEl.textContent = profile.emoji || profile.name[0].toUpperCase();
+    avatarEl.textContent = profile.emoji || profile.name[0]?.toUpperCase() || '?';
   }
   document.getElementById('currentUserName').textContent = profile.name;
 
+  // Diary name in top bar
+  document.getElementById('siteName').textContent = currentDiary.name;
+  document.title = currentDiary.name;
+
   const prefs = loadPrefs(currentUser.uid);
-  if (prefs.color)     applyColor(prefs.color);
-  if (prefs.font)      applyFont(prefs.font);
-  if (prefs.size)      { document.getElementById('sizeSlider').value = prefs.size; setFontSize(prefs.size); }
-  if (prefs.diaryName) applyDiaryName(prefs.diaryName);
+  if (prefs.color) applyColor(prefs.color);
+  if (prefs.font)  applyFont(prefs.font);
+  if (prefs.size)  { document.getElementById('sizeSlider').value = prefs.size; setFontSize(prefs.size); }
 
   applyWallpaper(loadWallpaperData(currentUser.uid));
 
   document.getElementById('entryDate').value     = todayISO();
   document.getElementById('entryText').value     = '';
   document.getElementById('entryLocation').value = '';
-  document.getElementById('photoBlocks').innerHTML = '';
   updateCount();
 
   if (unsubscribeEntries) unsubscribeEntries();
   unsubscribeEntries = db.collection('users').doc(currentUser.uid)
+    .collection('diaries').doc(currentDiary.id)
     .collection('entries').orderBy('date','desc')
     .onSnapshot(snap => { cachedEntries = snap.docs.map(d => d.data()); renderList(); });
 }
@@ -904,14 +1024,14 @@ function initApp() {
    WALLPAPER
 ══════════════════════════════════════ */
 function applyWallpaper(data) {
-  const body = document.body;
-  const preview = document.getElementById('wallpaperPreview');
+  const body      = document.body;
+  const preview   = document.getElementById('wallpaperPreview');
   const removeBtn = document.getElementById('removeWallpaperBtn');
   if (data && data.src) {
-    body.style.backgroundImage   = `url(${data.src})`;
-    body.style.backgroundSize    = 'cover';
+    body.style.backgroundImage    = `url(${data.src})`;
+    body.style.backgroundSize     = 'cover';
     body.style.backgroundAttachment = 'fixed';
-    body.style.backgroundPosition   = 'center';
+    body.style.backgroundPosition = 'center';
     body.classList.add('has-wallpaper');
     preview.style.backgroundImage = `url(${data.src})`;
     preview.classList.add('visible');
@@ -923,25 +1043,16 @@ function applyWallpaper(data) {
     if (removeBtn) removeBtn.style.display = 'none';
   }
 }
-
 function setWallpaperFromFile(input) {
   const file = input.files[0]; if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
     const data = { src: e.target.result };
-    saveWallpaperData(currentUser.uid, data);
-    applyWallpaper(data);
-    toast('Fondo actualizado ✓');
+    saveWallpaperData(currentUser.uid, data); applyWallpaper(data); toast('Fondo actualizado ✓');
   };
-  reader.readAsDataURL(file);
-  input.value = '';
+  reader.readAsDataURL(file); input.value = '';
 }
-
-function removeWallpaper() {
-  saveWallpaperData(currentUser.uid, null);
-  applyWallpaper(null);
-  toast('Fondo eliminado');
-}
+function removeWallpaper() { saveWallpaperData(currentUser.uid, null); applyWallpaper(null); toast('Fondo eliminado'); }
 
 /* ══════════════════════════════════════
    SAVE / LOAD ENTRIES
@@ -950,10 +1061,10 @@ const dot = document.getElementById('saveDot');
 function setDirty() { dot.classList.remove('saved'); dot.classList.add('dirty'); }
 function setSaved() { dot.classList.remove('dirty'); dot.classList.add('saved'); setTimeout(()=>dot.classList.remove('saved'),2500); }
 
-function collectPhotos() {
-  return Array.from(document.querySelectorAll('.photo-block')).map(b => ({
-    src: b.querySelector('img').src, caption: b.querySelector('.photo-caption').value,
-  }));
+function entriesRef() {
+  return db.collection('users').doc(currentUser.uid)
+    .collection('diaries').doc(currentDiary.id)
+    .collection('entries');
 }
 
 async function saveEntry() {
@@ -962,20 +1073,9 @@ async function saveEntry() {
   const location = document.getElementById('entryLocation').value.trim();
   if (!text) { toast('Escribe algo primero'); return; }
   try {
-    await db.collection('users').doc(currentUser.uid).collection('entries').doc(date)
-      .set({ date, text, location, updated: firebase.firestore.FieldValue.serverTimestamp() });
-    setSaved(); toast('Guardado ✓');
-    newEntry();
+    await entriesRef().doc(date).set({ date, text, location, updated: firebase.firestore.FieldValue.serverTimestamp() });
+    setSaved(); toast('Guardado ✓'); newEntry();
   } catch(e) { toast('Error al guardar'); }
-}
-
-function confirmClear() {
-  const text = document.getElementById('entryText').value.trim();
-  const loc  = document.getElementById('entryLocation').value.trim();
-  const photos = document.querySelectorAll('.photo-block').length;
-  if (!text && !loc && !photos) { toast('Ya está vacío'); return; }
-  if (!confirm('¿Borrar todo lo escrito?')) return;
-  newEntry();
 }
 
 function newEntry() {
@@ -998,8 +1098,7 @@ function loadEntry(date) {
 async function deleteEntry(date) {
   if (!confirm('¿Eliminar esta entrada?')) return;
   try {
-    await db.collection('users').doc(currentUser.uid).collection('entries').doc(date).delete();
-    localStorage.removeItem(photosKey(currentUser.uid, date));
+    await entriesRef().doc(date).delete();
     if (document.getElementById('entryDate').value === date) newEntry();
     toast('Entrada eliminada');
   } catch(e) { toast('Error al eliminar'); }
@@ -1007,9 +1106,9 @@ async function deleteEntry(date) {
 
 function renderList() {
   const el = document.getElementById('entriesList');
-  if (!cachedEntries.length) { el.innerHTML = '<p class="empty-state">Aún no hay entradas guardadas.</p>'; return; }
+  if (!cachedEntries.length) { el.innerHTML = '<p class="empty-state">Aún no hay entradas.</p>'; return; }
   el.innerHTML = cachedEntries.map(e => {
-    const preview = e.text ? e.text.substring(0,80) : '';
+    const preview  = e.text ? e.text.substring(0,80) : '';
     const locHtml  = e.location ? `<span class="entry-row-location">📍 ${e.location.replace(/</g,'&lt;')}</span>` : '';
     return `
       <div class="entry-row" onclick="loadEntry('${e.date}')">
@@ -1021,69 +1120,16 @@ function renderList() {
 }
 
 /* ══════════════════════════════════════
-   EXPORT (fotos removidas — solo texto)
+   CLEAR / EXPORT
 ══════════════════════════════════════ */
-function compressImage(dataUrl) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onerror = reject;
-    img.onload = () => {
-      const tryCompress = (maxPx, quality) => {
-        let { width, height } = img;
-        if (width > maxPx || height > maxPx) {
-          const r = Math.min(maxPx/width, maxPx/height);
-          width = Math.round(width*r); height = Math.round(height*r);
-        }
-        const c = document.createElement('canvas');
-        c.width = width; c.height = height;
-        c.getContext('2d').drawImage(img, 0, 0, width, height);
-        return c.toDataURL('image/jpeg', quality);
-      };
-      // Intento 1: 1024px calidad media
-      let result = tryCompress(1024, 0.70);
-      // Si sigue siendo muy grande, comprimir más
-      if (result.length > 900000) result = tryCompress(800, 0.55);
-      if (result.length > 900000) result = tryCompress(600, 0.45);
-      if (!result || result === 'data:,') { reject(new Error('No se pudo comprimir')); return; }
-      resolve(result);
-    };
-    img.src = dataUrl;
-  });
+function confirmClear() {
+  const text = document.getElementById('entryText').value.trim();
+  const loc  = document.getElementById('entryLocation').value.trim();
+  if (!text && !loc) { toast('Ya está vacío'); return; }
+  if (!confirm('¿Borrar todo lo escrito?')) return;
+  newEntry();
 }
 
-async function savePhotosToFirestore(date) {
-  const blocks = document.querySelectorAll('.photo-block');
-  const refs = [];
-  for (let i = 0; i < blocks.length; i++) {
-    const img     = blocks[i].querySelector('img');
-    const caption = blocks[i].querySelector('.photo-caption').value;
-    const pid     = blocks[i].dataset.photoId;
-    if (pid) {
-      await db.collection('users').doc(currentUser.uid).collection('photos').doc(pid).update({ caption });
-      refs.push({ id: pid, caption });
-    } else {
-      const compressed = await compressImage(img.src);
-      const docRef = await db.collection('users').doc(currentUser.uid)
-        .collection('photos').add({ src: compressed, caption, entryDate: date });
-      img.src = compressed;
-      blocks[i].dataset.photoId = docRef.id;
-      refs.push({ id: docRef.id, caption });
-    }
-  }
-  return refs;
-}
-
-async function loadPhotosFromFirestore(photoRefs) {
-  if (!photoRefs || !photoRefs.length) return [];
-  const docs = await Promise.all(
-    photoRefs.map(r => db.collection('users').doc(currentUser.uid).collection('photos').doc(r.id).get())
-  );
-  return docs.filter(d => d.exists).map(d => ({ id: d.id, ...d.data() }));
-}
-
-/* ══════════════════════════════════════
-   EXPORT
-══════════════════════════════════════ */
 function updateCount() { document.getElementById('charCount').textContent = document.getElementById('entryText').value.length; }
 document.getElementById('entryText').addEventListener('input', () => { updateCount(); setDirty(); });
 
@@ -1105,7 +1151,7 @@ function exportAll() {
   const content = [...cachedEntries].sort((a,b)=>a.date.localeCompare(b.date)).map(e =>
     fmtDate(e.date)+(e.location?'  ·  '+e.location:'')+'\n'+'─'.repeat(36)+'\n\n'+(e.text||'')
   ).join('\n\n\n');
-  dl(content,'mi-diario.txt'); toast('Diario exportado');
+  dl(content, currentDiary.name+'.txt'); toast('Diario exportado');
 }
 
 function dl(text, name) {
@@ -1125,7 +1171,6 @@ const FONTS = [
   { key:'mono',     label:'Mono',     css:"'DM Mono', monospace",               sample:'Hoy pensé…' },
   { key:'sans',     label:'Sans',     css:"'Space Grotesk', sans-serif",        sample:'Hoy pensé…' },
 ];
-
 const COLORS = [
   { key:'cream',  bg:'#f5f0e8', bg2:'#ede8de', ink:'#1a1714', ink2:'#6b6460', ink3:'#a09890' },
   { key:'chalk',  bg:'#f8f7f4', bg2:'#eeede8', ink:'#1c1c1c', ink2:'#666',    ink3:'#aaa'    },
@@ -1142,12 +1187,11 @@ const COLORS = [
 function applyColor(key) {
   const c = COLORS.find(x=>x.key===key); if (!c) return;
   const r = document.documentElement.style;
-  r.setProperty('--bg',   c.bg);  r.setProperty('--bg2',  c.bg2);
-  r.setProperty('--ink',  c.ink); r.setProperty('--ink2', c.ink2);
-  r.setProperty('--ink3', c.ink3);
+  r.setProperty('--bg',c.bg); r.setProperty('--bg2',c.bg2);
+  r.setProperty('--ink',c.ink); r.setProperty('--ink2',c.ink2); r.setProperty('--ink3',c.ink3);
   r.setProperty('--cal-filter', parseInt(c.bg.slice(1,3),16)<100?'invert(1)':'none');
-  // Also update loginScreen background
-  document.getElementById('loginScreen').style.background = c.bg;
+  document.getElementById('loginScreen').style.background  = c.bg;
+  document.getElementById('diaryScreen').style.background  = c.bg;
   currentColorKey = key;
   document.querySelectorAll('.color-swatch').forEach(el=>el.classList.toggle('active',el.dataset.key===key));
   if (currentUser) savePrefsData(currentUser.uid,{...loadPrefs(currentUser.uid),color:key});
@@ -1169,9 +1213,21 @@ function setFontSize(val) {
   if (currentUser) savePrefsData(currentUser.uid,{...loadPrefs(currentUser.uid),size:+val});
 }
 
+function applyDiaryName(name) {
+  const n = name.trim() || currentDiary?.name || 'mi diario';
+  document.getElementById('siteName').textContent = n;
+  document.title = n;
+}
+
+async function saveDiaryName(name) {
+  const n = name.trim();
+  if (!n || !currentUser || !currentDiary) return;
+  await db.collection('users').doc(currentUser.uid).collection('diaries').doc(currentDiary.id).update({ name: n });
+  currentDiary.name = n;
+}
+
 function buildSettings() {
-  const prefs = loadPrefs(currentUser.uid);
-  document.getElementById('diaryNameInput').value = prefs.diaryName || '';
+  document.getElementById('diaryNameInput').value = currentDiary?.name || '';
   document.getElementById('fontGrid').innerHTML = FONTS.map(f=>`
     <button class="font-option ${f.key===currentFontKey?'active':''}" data-key="${f.key}" onclick="applyFont('${f.key}')">
       <span class="font-option-name">${f.label}</span>
@@ -1181,17 +1237,6 @@ function buildSettings() {
     <button class="color-swatch ${c.key===currentColorKey?'active':''}" data-key="${c.key}"
       style="background:${c.bg}; border:2px solid ${c.ink2};"
       onclick="applyColor('${c.key}')" title="${c.key}" aria-label="Color ${c.key}"></button>`).join('');
-}
-
-function applyDiaryName(name) {
-  const n = (name||'').trim() || 'mi diario';
-  document.querySelector('.site-name').textContent   = n;
-  document.querySelector('.login-title').textContent = n;
-  document.title = n;
-}
-
-function saveDiaryName(name) {
-  if (currentUser) savePrefsData(currentUser.uid, { ...loadPrefs(currentUser.uid), diaryName: name.trim() });
 }
 
 function openSettings()             { buildSettings(); document.getElementById('settingsBackdrop').classList.add('open'); }
